@@ -18,7 +18,7 @@
           />
           Overview
         </a>
-         <a href="#" class="nav-link" @click="toggleDropdown('manageUser')">
+        <a href="#" class="nav-link" @click="toggleDropdown('manageUser')">
           <img
             src="~/assets/img/fi_users.png"
             alt="Employees"
@@ -79,11 +79,7 @@
           <a href="#" class="ml-5 nav-link"> Karyawan </a>
         </div>
         <a href="#" class="nav-link" @click="toggleDropdown('laporan')">
-          <img
-            src="~/assets/img/flag.png"
-            alt="Employees"
-            class="w-5 h-5"
-          />
+          <img src="~/assets/img/flag.png" alt="Employees" class="w-5 h-5" />
           <span>Laporan</span>
           <img
             v-if="isDropdownOpen['laporan']"
@@ -124,7 +120,7 @@ export default {
   name: 'Sidebar',
   data() {
     return {
-       isDropdownOpen: {
+      isDropdownOpen: {
         manageUser: false,
         gaji: false,
         laporan: false,
@@ -133,7 +129,7 @@ export default {
   },
   methods: {
     toggleDropdown(dropdownName) {
-      this.isDropdownOpen[dropdownName] = !this.isDropdownOpen[dropdownName];
+      this.isDropdownOpen[dropdownName] = !this.isDropdownOpen[dropdownName]
     },
   },
 }
@@ -153,4 +149,3 @@ export default {
   margin-left: auto;
 }
 </style>
-
