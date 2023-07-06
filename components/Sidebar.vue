@@ -10,7 +10,7 @@
           <img src="../assets/img/logo-simaku-index.png" alt="" />
         </a>
         <div class="pt-[43px] text-sm text-grey">Daily Use</div>
-        <a href="index.html" class="nav-link active">
+        <a href="\" class="nav-link active">
           <img
             src="~/assets/img/fi_grid.png"
             alt="Employees"
@@ -40,18 +40,16 @@
         </a>
         <div v-if="isDropdownOpen['manageUser']" class="ml-7">
           <!-- Dropdown content here -->
-          <a href="#" class="ml-5 nav-link"> Dosen Tetap </a>
-          <a href="#" class="ml-5 nav-link"> Dosen Luar Biasa </a>
-          <a href="#" class="ml-5 nav-link"> Karyawan </a>
+          <a href="\manage\dosen_tetap\dosen_tetap" class="ml-5 nav-link">
+            Dosen Tetap
+          </a>
+          <a href="\manage\dosen_lb\dosen_lb" class="ml-5 nav-link">
+            Dosen Luar Biasa
+          </a>
+          <a href="\manage\karyawan\karyawan" class="ml-5 nav-link">
+            Karyawan
+          </a>
         </div>
-        <a href="#" class="nav-link">
-          <img
-            src="~/assets/img/fi_briefcase.png"
-            alt="Employees"
-            class="w-5 h-5 mr-2"
-          />
-          Kehadiran
-        </a>
         <a href="#" class="nav-link" @click="toggleDropdown('gaji')">
           <img
             src="~/assets/img/tabler_report-money.png"
@@ -102,21 +100,31 @@
           <a href="#" class="ml-5 nav-link"> Laporan Potongan </a>
           <a href="#" class="ml-5 nav-link"> Rekapitulasi Bank </a>
         </div>
-        <a href="#" class="nav-link">
+        <button class="nav-link" @click="showLogoutModal">
           <img
             src="~/assets/img/fi_log-out.png"
             alt="Employees"
             class="w-5 h-5 mr-2"
           />
           <p class="text-red-700">Logout</p>
-        </a>
+        </button>
+        <LogoutConfirmationModal
+          v-if="showModal"
+          @cancel="cancelLogout"
+          @confirm="confirmLogout"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import LogoutConfirmationModal from '@/components/LogoutConfirmationModal.vue'
+
 export default {
+  components: {
+    LogoutConfirmationModal,
+  },
   name: 'Sidebar',
   data() {
     return {
@@ -125,11 +133,25 @@ export default {
         gaji: false,
         laporan: false,
       },
+      showModal: false,
     }
   },
   methods: {
     toggleDropdown(dropdownName) {
       this.isDropdownOpen[dropdownName] = !this.isDropdownOpen[dropdownName]
+    },
+    showLogoutModal() {
+      this.showModal = true
+    },
+    cancelLogout() {
+      this.showModal = false
+    },
+    confirmLogout() {
+      // Logika untuk melakukan logout, misalnya menghapus token atau data sesi
+      this.$router.push('/login')
+      // Setelah logout, Anda dapat mengarahkan pengguna kembali ke halaman login atau halaman lain yang sesuai.
+      this.showModal = false
+      console.log('Logout berhasil!')
     },
   },
 }

@@ -2,9 +2,13 @@
   <div>
     <Sidebar />
     <!-- Main Content -->
-    <div class="lg:pr-[70px] py-[50px] lg:ml-[320px] xl:ml-[365px] px-4 lg:pl-0">
+    <div
+      class="lg:pr-[70px] py-[50px] lg:ml-[320px] xl:ml-[365px] px-4 lg:pl-0"
+    >
       <!-- Top Section -->
-      <section class="flex flex-col flex-wrap justify-between gap-6 md:items-center md:flex-row">
+      <section
+        class="flex flex-col flex-wrap justify-between gap-6 md:items-center md:flex-row"
+      >
         <div class="flex items-center justify-between gap-4">
           <a href="#" id="toggleOpenSidebar" class="lg:hidden"> </a>
           <div class="text-[32px] font-semibold text-dark">Overview</div>
