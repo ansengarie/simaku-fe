@@ -6,14 +6,14 @@
         <img src="~/assets/img/logo-simaku-index.png" class="mx-[50px]" />
       </div>
       <div class="flex justify-end justify-self-end">
-        <a href="../dosen_tetap/dosen_tetap">
+        <nuxt-link to="/manage-pegawai/dosen-tetap">
           <img src="~/assets/img/btn_close.png" class="mx-[50px]" />
-        </a>
+        </nuxt-link>
       </div>
     </div>
 
     <div class="items-center justify-center mt-[19px]">
-      <p class="text-center text-title">Tambah Dosen Tetap</p>
+      <p class="text-center text-title">Edit Dosen Tetap</p>
     </div>
     <div class="flex justify-center justify-self-center mt-[5px]">
       <form class="w-full card">
@@ -58,15 +58,18 @@
           <input type="Number" class="input-field" />
         </div>
         <div class="flex justify-between mt-[43px] mb-[40px] w-[570]">
-          <a
-            href="index.html"
+          <nuxt-link
+            to="/manage-pegawai/dosen-tetap"
             class="btn btn-primary w-[260px] h-[46px] mr-[51px] bg-red-700"
           >
             Batal
-          </a>
-          <a href="index.html" class="btn btn-primary h-[46px] w-[260px]">
-            Tambah
-          </a>
+          </nuxt-link>
+          <nuxt-link
+            to="/manage-pegawai/dosen-tetap"
+            class="btn btn-primary h-[46px] w-[260px]"
+          >
+            Simpan
+          </nuxt-link>
         </div>
       </form>
     </div>

@@ -11,7 +11,7 @@
       >
         <div class="flex items-center justify-between gap-4">
           <a href="#" id="toggleOpenSidebar" class="lg:hidden"> </a>
-          <div class="text-[32px] font-semibold text-dark">Dosen Tetap</div>
+          <div class="text-[32px] font-semibold text-dark">Karyawan</div>
         </div>
         <div class="flex items-center gap-4">
           <form class="shrink md:w-[516px] w-full">
@@ -38,11 +38,11 @@
         <div class="mb-[30px]">
           <div class="flex items-center justify-end gap-6">
             <div>
-              <a href="tambah_dosen_tetap">
+              <a href="tambah_karyawan">
                 <button
                   class="px-8 py-2 text-lg font-bold text-white rounded-full bg-primary w-190 h-46"
                 >
-                  Tambah Dosen
+                  Tambah Karyawan
                 </button>
               </a>
             </div>
@@ -56,7 +56,7 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   In Total
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">19</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">10</div>
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Active
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">5</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">9</div>
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Inactive
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">4</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">1</div>
               </div>
             </div>
           </div>

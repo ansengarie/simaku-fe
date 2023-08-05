@@ -7,26 +7,45 @@
     <div class="px-6 py-[50px] gap-y-[50px] flex flex-col">
       <div class="flex flex-col gap-4">
         <a href="#" class="flex justify-center">
-          <img src="../assets/img/logo-simaku-index.png" alt="" />
+          <img src="~/assets/img/logo-simaku-index.png" alt="" />
         </a>
         <div class="pt-[43px] text-sm text-grey">Daily Use</div>
-        <a href="\" class="nav-link active">
+
+        <!-- Overview -->
+        <nuxt-link
+          to="/"
+          exact
+          class="nav-link"
+          :class="{ active: isActive('/') }"
+        >
           <img
             src="~/assets/img/fi_grid.png"
             alt="Employees"
             class="w-5 h-5 mr-2"
           />
           Overview
-        </a>
-        <a href="#" class="nav-link" @click="toggleDropdown('manageUser')">
+        </nuxt-link>
+
+        <!-- Manage Pegawai -->
+        <a
+          href="#"
+          class="nav-link"
+          @click="toggleDropdown('managePegawai')"
+          :class="{
+            active:
+              isActive('/manage-pegawai/dosen-tetap') ||
+              isActive('/manage-pegawai/dosen-lb') ||
+              isActive('/manage-pegawai/karyawan'),
+          }"
+        >
           <img
             src="~/assets/img/fi_users.png"
             alt="Employees"
             class="w-5 h-5"
           />
-          <span>Manage User</span>
+          <span>Manage Pegawai</span>
           <img
-            v-if="isDropdownOpen['manageUser']"
+            v-if="isDropdownOpen['managePegawai']"
             src="~/assets/img/ic_down.png"
             alt="Employees"
             class="dropdown-icon"
@@ -38,19 +57,31 @@
             class="dropdown-icon"
           />
         </a>
-        <div v-if="isDropdownOpen['manageUser']" class="ml-7">
+        <div v-if="isDropdownOpen['managePegawai']" class="ml-7">
           <!-- Dropdown content here -->
-          <a href="\manage\dosen_tetap\dosen_tetap" class="ml-5 nav-link">
+          <nuxt-link to="/manage-pegawai/dosen-tetap" class="ml-5 nav-link">
             Dosen Tetap
-          </a>
-          <a href="\manage\dosen_lb\dosen_lb" class="ml-5 nav-link">
+          </nuxt-link>
+          <nuxt-link to="/manage-pegawai/dosen-lb" class="ml-5 nav-link">
             Dosen Luar Biasa
-          </a>
-          <a href="\manage\karyawan\karyawan" class="ml-5 nav-link">
+          </nuxt-link>
+          <nuxt-link to="/manage-pegawai/karyawan" class="ml-5 nav-link">
             Karyawan
-          </a>
+          </nuxt-link>
         </div>
-        <a href="#" class="nav-link" @click="toggleDropdown('gaji')">
+
+        <!-- Gaji -->
+        <a
+          href="#"
+          class="nav-link"
+          @click="toggleDropdown('gaji')"
+          :class="{
+            active:
+              isActive('/gaji/dosen-tetap') ||
+              isActive('/gaji/dosen-lb') ||
+              isActive('/gaji/karyawan'),
+          }"
+        >
           <img
             src="~/assets/img/tabler_report-money.png"
             alt="Employees"
@@ -72,11 +103,31 @@
         </a>
         <div v-if="isDropdownOpen['gaji']" class="ml-7">
           <!-- Dropdown content here -->
-          <a href="#" class="ml-5 nav-link"> Dosen Tetap </a>
-          <a href="#" class="ml-5 nav-link"> Dosen Luar Biasa </a>
-          <a href="#" class="ml-5 nav-link"> Karyawan </a>
+          <nuxt-link to="/gaji/dosen-tetap" class="ml-5 nav-link">
+            Dosen Tetap
+          </nuxt-link>
+          <nuxt-link to="/gaji/dosen-lb" class="ml-5 nav-link">
+            Dosen Luar Biasa
+          </nuxt-link>
+          <nuxt-link to="/gaji/karyawan" class="ml-5 nav-link">
+            Karyawan
+          </nuxt-link>
         </div>
-        <a href="#" class="nav-link" @click="toggleDropdown('laporan')">
+
+        <!-- Laporan -->
+        <a
+          href="#"
+          class="nav-link"
+          @click="toggleDropdown('laporan')"
+          :class="{
+            active:
+              isActive('/laporan/rekapitulasi-pendapatan') ||
+              isActive('/laporan/pendapatan-bersih') ||
+              isActive('/laporan/laporan-pajak') ||
+              isActive('/laporan/laporan-potongan') ||
+              isActive('/laporan/rekapitulasi-bank'),
+          }"
+        >
           <img src="~/assets/img/flag.png" alt="Employees" class="w-5 h-5" />
           <span>Laporan</span>
           <img
@@ -94,12 +145,27 @@
         </a>
         <div v-if="isDropdownOpen['laporan']" class="ml-7">
           <!-- Dropdown content here -->
-          <a href="#" class="ml-5 nav-link"> Rekapitulasi </a>
-          <a href="#" class="ml-5 nav-link"> Pendapatan Bersih </a>
-          <a href="#" class="ml-5 nav-link"> Laporan Pajak </a>
-          <a href="#" class="ml-5 nav-link"> Laporan Potongan </a>
-          <a href="#" class="ml-5 nav-link"> Rekapitulasi Bank </a>
+          <nuxt-link
+            to="/laporan/rekapitulasi-pendapatan"
+            class="ml-5 nav-link"
+          >
+            Rekapitulasi Pendapatan
+          </nuxt-link>
+          <nuxt-link to="/laporan/pendapatan-bersih" class="ml-5 nav-link">
+            Pendapatan Bersih
+          </nuxt-link>
+          <nuxt-link to="/laporan/laporan-pajak" class="ml-5 nav-link">
+            Laporan Pajak
+          </nuxt-link>
+          <nuxt-link to="/laporan/laporan-potongan" class="ml-5 nav-link">
+            Laporan Potongan
+          </nuxt-link>
+          <nuxt-link to="/laporan/rekapitulasi-bank" class="ml-5 nav-link">
+            Rekapitulasi Bank
+          </nuxt-link>
         </div>
+
+        <!-- Logout -->
         <button class="nav-link" @click="showLogoutModal">
           <img
             src="~/assets/img/fi_log-out.png"
@@ -119,7 +185,7 @@
 </template>
 
 <script>
-import LogoutConfirmationModal from '@/components/LogoutConfirmationModal.vue'
+import LogoutConfirmationModal from '~/components/logout-confirmation-modal.vue'
 
 export default {
   components: {
@@ -129,7 +195,7 @@ export default {
   data() {
     return {
       isDropdownOpen: {
-        manageUser: false,
+        managePegawai: false,
         gaji: false,
         laporan: false,
       },
@@ -137,8 +203,11 @@ export default {
     }
   },
   methods: {
-    toggleDropdown(dropdownName) {
-      this.isDropdownOpen[dropdownName] = !this.isDropdownOpen[dropdownName]
+    isActive(url) {
+      return this.$route.path === url
+    },
+    toggleDropdown(category) {
+      this.$set(this.isDropdownOpen, category, !this.isDropdownOpen[category])
     },
     showLogoutModal() {
       this.showModal = true

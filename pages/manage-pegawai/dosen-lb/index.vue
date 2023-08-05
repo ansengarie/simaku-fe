@@ -40,11 +40,11 @@
         <div class="mb-[30px]">
           <div class="flex items-center justify-end gap-6">
             <div>
-              <a href="tambah_dosen_tetap">
+              <a href="tambah_dosen_lb">
                 <button
                   class="px-8 py-2 text-lg font-bold text-white rounded-full bg-primary w-190 h-46"
                 >
-                  Tambah Dosen
+                  Tambah Dosen Luar Biasa
                 </button>
               </a>
             </div>

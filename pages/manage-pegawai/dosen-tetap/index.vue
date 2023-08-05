@@ -11,7 +11,7 @@
       >
         <div class="flex items-center justify-between gap-4">
           <a href="#" id="toggleOpenSidebar" class="lg:hidden"> </a>
-          <div class="text-[32px] font-semibold text-dark">Karyawan</div>
+          <div class="text-[32px] font-semibold text-dark">Dosen Tetap</div>
         </div>
         <div class="flex items-center gap-4">
           <form class="shrink md:w-[516px] w-full">
@@ -24,7 +24,7 @@
                 placeholder="Search ..."
               />
               <img
-                src="../../../assets/img/ic_search.png"
+                src="~/assets/img/ic_search.png"
                 alt="Search Icon"
                 class="absolute inset-y-0 right-0 flex items-center my-auto mr-[20px]"
               />
@@ -38,13 +38,13 @@
         <div class="mb-[30px]">
           <div class="flex items-center justify-end gap-6">
             <div>
-              <a href="tambah_dosen_tetap">
+              <nuxt-link to="dosen-tetap/create">
                 <button
                   class="px-8 py-2 text-lg font-bold text-white rounded-full bg-primary w-190 h-46"
                 >
-                  Tambah Dosen
+                  Tambah Dosen Tetap
                 </button>
-              </a>
+              </nuxt-link>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   In Total
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">10</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">19</div>
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Active
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">9</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">5</div>
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Inactive
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">1</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">4</div>
               </div>
             </div>
           </div>
@@ -118,13 +118,15 @@
                       <td>BNI</td>
                       <td>
                         <div class="flex justify-center">
+                          <nuxt-link to="/manage-pegawai/dosen-tetap/edit">
+                            <img
+                              src="~/assets/img/ic_edit.png"
+                              alt="Edit Icon"
+                              class="w-[24px] col-span-1"
+                            />
+                          </nuxt-link>
                           <img
-                            src="../../../assets/img/ic_edit.png"
-                            alt="Edit Icon"
-                            class="w-[24px] col-span-1"
-                          />
-                          <img
-                            src="../../../assets/img/ic_delete.png"
+                            src="~/assets/img/ic_delete.png"
                             alt="Delete"
                             class="w-[24px] col-span-1"
                           />
@@ -147,12 +149,12 @@
                       <td>
                         <div class="flex justify-center">
                           <img
-                            src="../../../assets/img/ic_edit.png"
+                            src="~/assets/img/ic_edit.png"
                             alt="Edit Icon"
                             class="w-[24px] col-span-1"
                           />
                           <img
-                            src="../../../assets/img/ic_delete.png"
+                            src="~/assets/img/ic_delete.png"
                             alt="Delete"
                             class="w-[24px] col-span-1"
                           />
@@ -175,12 +177,12 @@
                       <td>
                         <div class="flex justify-center">
                           <img
-                            src="../../../assets/img/ic_edit.png"
+                            src="~/assets/img/ic_edit.png"
                             alt="Edit Icon"
                             class="w-[24px] col-span-1"
                           />
                           <img
-                            src="../../../assets/img/ic_delete.png"
+                            src="~/assets/img/ic_delete.png"
                             alt="Delete"
                             class="w-[24px] col-span-1"
                           />
@@ -203,12 +205,12 @@
                       <td>
                         <div class="flex justify-center">
                           <img
-                            src="../../../assets/img/ic_edit.png"
+                            src="~/assets/img/ic_edit.png"
                             alt="Edit Icon"
                             class="w-[24px] col-span-1"
                           />
                           <img
-                            src="../../../assets/img/ic_delete.png"
+                            src="~/assets/img/ic_delete.png"
                             alt="Delete"
                             class="w-[24px] col-span-1"
                           />
@@ -231,12 +233,12 @@
                       <td>
                         <div class="flex justify-center">
                           <img
-                            src="../../../assets/img/ic_edit.png"
+                            src="~/assets/img/ic_edit.png"
                             alt="Edit Icon"
                             class="w-[24px] col-span-1"
                           />
                           <img
-                            src="../../../assets/img/ic_delete.png"
+                            src="~/assets/img/ic_delete.png"
                             alt="Delete"
                             class="w-[24px] col-span-1"
                           />
@@ -253,12 +255,12 @@
                   <p class="mr-[16px] text-muted">Halaman</p>
                   <p class="mr-[20px] text-paging">1</p>
                   <img
-                    src="../../../assets/img/ic_nav-left.png"
+                    src="~/assets/img/ic_nav-left.png"
                     alt="Left Arrow"
                     class="w-[24px] col-span-1 ml-[6px]"
                   />
                   <img
-                    src="../../../assets/img/ic_nav-right.png"
+                    src="~/assets/img/ic_nav-right.png"
                     alt="Right Arrow"
                     class="w-[24px] col-span-1 mr-[6px]"
                   />
