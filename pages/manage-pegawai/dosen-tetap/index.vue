@@ -56,7 +56,9 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   In Total
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">19</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">
+                  {{ totalAktifDosenTetap }}
+                </div>
               </div>
             </div>
           </div>
@@ -67,7 +69,9 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Active
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">5</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">
+                  {{ totalAktifDosenTetap }}
+                </div>
               </div>
             </div>
           </div>
@@ -77,7 +81,9 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Inactive
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">4</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">
+                  {{ totalAktifDosenTetap }}
+                </div>
               </div>
             </div>
           </div>
@@ -102,141 +108,45 @@
                     </tr>
                   </thead>
                   <tbody class="pt-[16px]">
-                    <!-- Isi tabel -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
+                    <!-- Gunakan v-for untuk mengulang data dari response -->
+                    <tr
+                      class="pt-[16px] border-b"
+                      v-for="dosen in dosenTetapData"
+                      :key="dosen.id"
+                    >
+                      <td class="py-[16px]">{{ dosen.no_pegawai }}</td>
+                      <td>{{ dosen.nama }}</td>
+                      <td>{{ dosen.golongan }}</td>
                       <td>
+                        <!-- Gunakan v-bind untuk mengatur kelas sesuai dengan status -->
                         <p
-                          class="bg-green-400 rounded-full w-[60px] m-auto text-green-700 font-bold"
+                          :class="{
+                            'bg-green-400 rounded-full w-[60px] m-auto text-green-700 font-bold':
+                              dosen.status === 'AKTIF' ||
+                              dosen.status === 'aktif' ||
+                              dosen.status === 'Aktif',
+                            'bg-red-400 rounded-full w-[110px] m-auto text-red-700 font-bold':
+                              dosen.status === 'TIDAK AKTIF' ||
+                              dosen.status === 'tidak aktif' ||
+                              dosen.status === 'Tidak Aktif',
+                          }"
                         >
-                          AKTIF
+                          {{ dosen.status }}
                         </p>
                       </td>
-                      <td>Koordinator Laboratorium</td>
-                      <td>BNI</td>
+                      <td>{{ dosen.jabatan }}</td>
+                      <td>{{ dosen.nama_bank }}</td>
                       <td>
                         <div class="flex justify-center">
-                          <nuxt-link to="/manage-pegawai/dosen-tetap/edit">
+                          <nuxt-link
+                            :to="`/manage-pegawai/dosen-tetap/edit/${dosen.id}`"
+                          >
                             <img
                               src="~/assets/img/ic_edit.png"
                               alt="Edit Icon"
                               class="w-[24px] col-span-1"
                             />
                           </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] col-span-1"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">002</td>
-                      <td>Ade Sukendar, ST.,MT</td>
-                      <td>IV A</td>
-                      <td>
-                        <p
-                          class="bg-green-400 rounded-full w-[60px] m-auto text-green-700 font-bold"
-                        >
-                          AKTIF
-                        </p>
-                      </td>
-                      <td>Dosen</td>
-                      <td>Mandiri</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <img
-                            src="~/assets/img/ic_edit.png"
-                            alt="Edit Icon"
-                            class="w-[24px] col-span-1"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] col-span-1"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">003</td>
-                      <td>Erik, ST., M. Kom.</td>
-                      <td>IV A</td>
-                      <td>
-                        <p
-                          class="bg-green-400 rounded-full w-[60px] m-auto text-green-700 font-bold"
-                        >
-                          AKTIF
-                        </p>
-                      </td>
-                      <td>Koordinator Mahasiswa</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <img
-                            src="~/assets/img/ic_edit.png"
-                            alt="Edit Icon"
-                            class="w-[24px] col-span-1"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] col-span-1"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">004</td>
-                      <td>Hendra Komara, ST.,MT.</td>
-                      <td>IV A</td>
-                      <td>
-                        <p
-                          class="bg-red-400 rounded-full w-[110px] m-auto text-red-700 font-bold"
-                        >
-                          TIDAK AKTIF
-                        </p>
-                      </td>
-                      <td>Dosen</td>
-                      <td>Mandiri</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <img
-                            src="~/assets/img/ic_edit.png"
-                            alt="Edit Icon"
-                            class="w-[24px] col-span-1"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] col-span-1"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">005</td>
-                      <td>R. Sandhika Galih Amalga, ST., MT</td>
-                      <td>IV A</td>
-                      <td>
-                        <p
-                          class="bg-green-400 rounded-full w-[60px] m-auto text-green-700 font-bold"
-                        >
-                          AKTIF
-                        </p>
-                      </td>
-                      <td>Dosen</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <img
-                            src="~/assets/img/ic_edit.png"
-                            alt="Edit Icon"
-                            class="w-[24px] col-span-1"
-                          />
                           <img
                             src="~/assets/img/ic_delete.png"
                             alt="Delete"
@@ -276,13 +186,58 @@
 
 <script>
 import Sidebar from '~/components/Sidebar.vue' // Impor komponen Sidebar
+import axios from 'axios' // Impor library axios
 
 export default {
   name: 'Index',
+  data() {
+    return {
+      totalAktifDosenTetap: 0, // Inisialisasi data sebagai null
+      dosenTetapData: [], // Inisialisasi array untuk menyimpan data Dosen Tetap
+    }
+  },
+  mounted() {
+    this.fetchDosenTetapData()
+    this.fetchDataDosenTetap()
+  },
   components: {
     Sidebar, // Daftarkan komponen Sidebar di sini
   },
   // Logika dan konten halaman
+  methods: {
+    async fetchDosenTetapData() {
+      console.log('Token:', this.token)
+      console.log(localStorage.getItem('token'), 'ini token')
+      try {
+        const response = await this.$axios.get('dosentetap', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        console.log('Dosen Tetap data response:', response)
+        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
+        this.totalAktifDosenTetap = response.data.data.total
+      } catch (error) {
+        console.error('Error fetching Dosen Tetap data:', error)
+      }
+    },
+    async fetchDataDosenTetap() {
+      console.log('Token:', this.token)
+      console.log(localStorage.getItem('token'), 'ini token')
+      try {
+        const response = await this.$axios.get('dosentetap', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        console.log('Dosen Tetap data response:', response)
+        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
+        this.dosenTetapData = response.data.data.data
+      } catch (error) {
+        console.error('Error fetching Dosen Tetap data:', error)
+      }
+    },
+  },
 }
 </script>
 

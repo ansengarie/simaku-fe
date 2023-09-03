@@ -217,7 +217,7 @@ export default {
     },
     confirmLogout() {
       // Logika untuk melakukan logout, misalnya menghapus token atau data sesi
-      this.$router.push('auth/login')
+      this.$router.push('../auth/login')
       // Setelah logout, Anda dapat mengarahkan pengguna kembali ke halaman login atau halaman lain yang sesuai.
       this.showModal = false
       console.log('Logout berhasil!')

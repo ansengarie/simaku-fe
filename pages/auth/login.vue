@@ -70,6 +70,7 @@ export default {
         // localStorage.setItem('token', this.token);
       } catch (error) {
         console.error('Login error:', error)
+        window.alert('Login failed. Please check your email and password.')
       }
     },
   },
