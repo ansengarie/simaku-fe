@@ -42,7 +42,6 @@
             </div>
           </div>
         </div>
-
         <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-11">
           <div class="card !gap-y-10 min-h-[200px]">
             <div class="flex items-center justify-between">
@@ -50,7 +49,9 @@
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Dosen Tetap
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">0</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">
+                  {{ totalAktifDosenTetap }}
+                </div>
               </div>
               <div>
                 <button>
@@ -65,14 +66,15 @@
               </div>
             </div>
           </div>
-
           <div class="card !gap-y-10 min-h-[200px]">
             <div class="flex items-center justify-between">
               <div>
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Dosen Luar Biasa
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">0</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">
+                  {{ totalAktifDosenLuarBiasa }}
+                </div>
               </div>
               <div>
                 <button>
@@ -87,14 +89,15 @@
               </div>
             </div>
           </div>
-
           <div class="card !gap-y-10 min-h-[200px]">
             <div class="flex items-center justify-between">
               <div>
                 <p class="overflow-hidden text-grey whitespace-nowrap">
                   Karyawan
                 </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">0</div>
+                <div class="text-[32px] font-bold text-dark mt-[6px]">
+                  {{ totalAktifKaryawan }}
+                </div>
               </div>
               <div>
                 <button>
@@ -106,46 +109,6 @@
                     />
                   </a>
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="pt-[50px]">
-        <div class="grid md:grid-cols-2 gap-11">
-          <!-- Documents -->
-          <div>
-            <!-- Section Header -->
-            <div class="mb-[30px]">
-              <div class="flex items-center justify-between gap-6">
-                <div>
-                  <div class="text-xl font-medium text-dark">Documents</div>
-                  <p class="text-grey">Standard procedure</p>
-                </div>
-              </div>
-            </div>
-            <div class="card md:min-h-[468px]">
-              <div class="m-auto text-center">
-                <!-- content here -->
-              </div>
-            </div>
-          </div>
-
-          <!-- History -->
-          <div>
-            <!-- Section Header -->
-            <div class="mb-[30px]">
-              <div class="flex items-center justify-between gap-6">
-                <div>
-                  <div class="text-xl font-medium text-dark">History</div>
-                  <p class="text-grey">Track the flow</p>
-                </div>
-              </div>
-            </div>
-            <div class="card min-h-[468px]">
-              <div class="m-auto text-center">
-                <!-- content here -->
               </div>
             </div>
           </div>
@@ -157,13 +120,77 @@
 
 <script>
 import Sidebar from '~/components/Sidebar.vue' // Impor komponen Sidebar
+import axios from 'axios' // Impor library axios
 
 export default {
   name: 'Index',
+  data() {
+    return {
+      totalAktifDosenTetap: 0, // Inisialisasi data sebagai null
+      totalAktifDosenLuarBiasa: 0, // Inisialisasi data sebagai null
+      totalAktifKaryawan: 0, // Inisialisasi data sebagai null
+    }
+  },
   components: {
     Sidebar, // Daftarkan komponen Sidebar di sini
   },
-  // Logika dan konten halaman
+  mounted() {
+    this.fetchDosenTetapData()
+    this.fetchDosenLuarBiasaData()
+    this.fetchKaryawanData()
+  },
+  methods: {
+    async fetchDosenTetapData() {
+      console.log('Token:', this.token)
+      console.log(localStorage.getItem('token'), 'ini token')
+      try {
+        const response = await this.$axios.get('dosentetap', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        console.log('Dosen Tetap data response:', response)
+        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
+        this.totalAktifDosenTetap = response.data.data.total
+      } catch (error) {
+        console.error('Error fetching Dosen Tetap data:', error)
+      }
+    },
+
+    async fetchDosenLuarBiasaData() {
+      console.log('Token:', this.token)
+      console.log(localStorage.getItem('token'), 'ini token')
+      try {
+        const response = await this.$axios.get('/dosenlb', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        console.log('Dosen Tetap data response:', response)
+        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
+        this.totalAktifDosenLuarBiasa = response.data.data.total
+      } catch (error) {
+        console.error('Error fetching Dosen Tetap data:', error)
+      }
+    },
+
+    async fetchKaryawanData() {
+      console.log('Token:', this.token)
+      console.log(localStorage.getItem('token'), 'ini token')
+      try {
+        const response = await this.$axios.get('/karyawan', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        console.log('karyawan response:', response)
+        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
+        this.totalAktifKaryawan = response.data.data.total
+      } catch (error) {
+        console.error('Error fetching Karyawan:', error)
+      }
+    },
+  },
 }
 </script>
 
