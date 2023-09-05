@@ -123,6 +123,7 @@ import Sidebar from '~/components/Sidebar.vue' // Impor komponen Sidebar
 import axios from 'axios' // Impor library axios
 
 export default {
+  // middleware: 'authenticated',
   name: 'Index',
   data() {
     return {
@@ -138,8 +139,14 @@ export default {
     this.fetchDosenTetapData()
     this.fetchDosenLuarBiasaData()
     this.fetchKaryawanData()
+    if (localStorage.getItem('token') == null) this.$router.push('/auth/login')
   },
   methods: {
+    // cekToken() {
+    //   if (localStorage.getItem('token') == null) {
+    //     this.$router.push('/auth/login')
+    //   }
+    // },
     async fetchDosenTetapData() {
       console.log('Token:', this.token)
       console.log(localStorage.getItem('token'), 'ini token')

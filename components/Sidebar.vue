@@ -188,6 +188,11 @@
 import LogoutConfirmationModal from '~/components/logout-confirmation-modal.vue'
 
 export default {
+  computed: {
+    token() {
+      return this.$store.state.token
+    },
+  },
   components: {
     LogoutConfirmationModal,
   },
@@ -217,6 +222,8 @@ export default {
     },
     confirmLogout() {
       // Logika untuk melakukan logout, misalnya menghapus token atau data sesi
+      localStorage.removeItem('token')
+      // this.$router.push('/login');
       this.$router.push('../auth/login')
       // Setelah logout, Anda dapat mengarahkan pengguna kembali ke halaman login atau halaman lain yang sesuai.
       this.showModal = false

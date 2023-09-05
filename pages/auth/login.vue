@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import axios from 'axios' // Import axios library
-
 export default {
   name: 'Login',
   data() {

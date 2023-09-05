@@ -44,6 +44,8 @@ export default {
     baseURL: 'https://testing-simaku-be.my.id/api',
   },
 
+  //router
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     postcss: {

@@ -210,7 +210,7 @@ export default {
       console.log('Token:', this.token)
       console.log(localStorage.getItem('token'), 'ini token')
       try {
-        const response = await this.$axios.get('dosentetap', {
+        const response = await this.$axios.get('dosentetap?status=Aktif', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
