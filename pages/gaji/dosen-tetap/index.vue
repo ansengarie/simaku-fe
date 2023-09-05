@@ -55,354 +55,18 @@
                     </tr>
                   </thead>
                   <tbody class="pt-[16px]">
-                    <!-- Isi tabel -->
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
+                    <tr
+                      class="pt-[16px] border-b"
+                      v-for="(item, index) in dosentetap"
+                      :key="index"
+                    >
+                      <td class="py-[16px]">{{ item.no_pegawai }}</td>
+                      <td>{{ item.nama }}</td>
+                      <td>{{ item.golongan }}</td>
+                      <td>{{ item.bank }}</td>
                       <td>
                         <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- 1 -->
-                    <tr class="pt-[16px] border-b">
-                      <td class="py-[16px]">001</td>
-                      <td>M. Tirta Mulia, ST., MT.</td>
-                      <td>IV A</td>
-                      <td>BNI</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link to="/gaji/dosen-tetap/create">
-                            <img
-                              src="~/assets/img/ic_add.png"
-                              alt="Add Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <nuxt-link to="/gaji/dosen-tetap/edit">
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] mr-[4px]"
-                            />
-                          </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_print.png"
-                            alt="Print"
-                            class="w-[24px] mr-[4px]"
-                          />
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] mr-[4px]"
-                          />
+                          <!-- Tambahkan tombol aksi di sini -->
                         </div>
                       </td>
                     </tr>
@@ -447,12 +111,21 @@ export default {
       title: 'Transaksi Gaji Dosen Tetap',
     }
   },
+  data() {
+    return {
+      dosentetap: [], // Ini akan menjadi array untuk menyimpan data Dosen Tetap
+    }
+  },
   components: {
     Sidebar,
     Dropdown,
     MonthYearDropdown, // Daftarkan komponen Sidebar di sini
   },
   // Logika dan konten halaman
+  created() {
+    this.fetchData()
+  },
+
   methods: {
     handleSelectClick() {
       // Get the selected values from the MonthYearDropdown component
@@ -462,6 +135,14 @@ export default {
       // Implement the action you want to perform when "Pilih" button is clicked
       console.log('Selected month:', selectedMonth)
       console.log('Selected year:', selectedYear)
+    },
+    async fetchData() {
+      try {
+        const response = await this.$axios.get('/dosentetap/?status=Aktif') // Sesuaikan dengan URL endpoint yang sesuai
+        this.dosentetap = response.data // Menyimpan data ke properti dosentetap
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
     },
   },
 }

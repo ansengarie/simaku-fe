@@ -32,7 +32,6 @@
 
 <script>
 import axios from 'axios' // Import axios library
-import { useRouter } from 'vue-router' // Import Vue Router
 
 export default {
   name: 'Login',

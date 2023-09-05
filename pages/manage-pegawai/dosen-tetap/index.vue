@@ -70,7 +70,7 @@
                   Active
                 </p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  {{ totalAktifDosenTetap }}
+                  {{ totalDosenTetapAktif }}
                 </div>
               </div>
             </div>
@@ -82,7 +82,7 @@
                   Inactive
                 </p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  {{ totalAktifDosenTetap }}
+                  {{ totalDosenTetapNonAktif }}
                 </div>
               </div>
             </div>
@@ -193,12 +193,13 @@ export default {
   data() {
     return {
       totalAktifDosenTetap: 0, // Inisialisasi data sebagai null
+      totalDosenTetapAktif: [], // Inisialisasi data sebagai null
+      totalDosenTetapNonAktif: [], // Inisialisasi data sebagai null
       dosenTetapData: [], // Inisialisasi array untuk menyimpan data Dosen Tetap
     }
   },
   mounted() {
     this.fetchDosenTetapData()
-    this.fetchDataDosenTetap()
   },
   components: {
     Sidebar, // Daftarkan komponen Sidebar di sini
@@ -214,27 +215,21 @@ export default {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
-        console.log('Dosen Tetap data response:', response)
-        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
-        this.totalAktifDosenTetap = response.data.data.total
-      } catch (error) {
-        console.error('Error fetching Dosen Tetap data:', error)
-      }
-    },
-    async fetchDataDosenTetap() {
-      console.log('Token:', this.token)
-      console.log(localStorage.getItem('token'), 'ini token')
-      try {
-        const response = await this.$axios.get('dosentetap', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        console.log('Dosen Tetap data response:', response)
+        console.log('Dosen Tetap data total response:', response)
         // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
         this.dosenTetapData = response.data.data.data
+
+        this.totalAktifDosenTetap = response.data.data.total
+
+        //saya ingin menghitung jumlah dosen tetap aktif dan non aktif dengan memasukan ke dalam array dan menghitung panjang array
+        this.totalDosenTetapAktif = this.dosenTetapData.filter(
+          (dosen) => dosen.status === 'Aktif'
+        ).length
+        this.totalDosenTetapNonAktif = this.dosenTetapData.filter(
+          (dosen) => dosen.status === 'Tidak Aktif'
+        ).length
       } catch (error) {
-        console.error('Error fetching Dosen Tetap data:', error)
+        console.error('Error fetching Dosen Tetap data Total:', error)
       }
     },
   },
