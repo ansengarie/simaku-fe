@@ -1,3 +1,5 @@
+const { resolve } = require('path')
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -44,7 +46,13 @@ export default {
     baseURL: 'https://testing-simaku-be.my.id/api',
   },
 
-  //router
+  // routes: [
+  //   {
+  //     name: 'edit-dosen-tetap',
+  //     path: '/edit/:id',
+  //     component: '~/pages/manage-pegawai/dosen-tetap/edit.vue',
+  //   },
+  // ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

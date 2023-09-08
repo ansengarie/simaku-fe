@@ -139,7 +139,10 @@
                       <td>
                         <div class="flex justify-center">
                           <nuxt-link
-                            :to="`/manage-pegawai/dosen-tetap/edit/${dosen.id}`"
+                            :to="{
+                              name: 'manage-pegawai-dosen-tetap-edit',
+                              params: { id: dosen.id },
+                            }"
                           >
                             <img
                               src="~/assets/img/ic_edit.png"
@@ -210,7 +213,7 @@ export default {
       console.log('Token:', this.token)
       console.log(localStorage.getItem('token'), 'ini token')
       try {
-        const response = await this.$axios.get('dosentetap?status=Aktif', {
+        const response = await this.$axios.get('dosentetap', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
