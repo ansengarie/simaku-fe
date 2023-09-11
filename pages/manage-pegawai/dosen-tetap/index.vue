@@ -150,10 +150,28 @@
                               class="w-[24px] col-span-1"
                             />
                           </nuxt-link>
-                          <img
-                            src="~/assets/img/ic_delete.png"
-                            alt="Delete"
-                            class="w-[24px] col-span-1"
+                          <!-- <nuxt-link
+                            :to="{
+                              name: 'manage-pegawai-dosen-tetap-delete',
+                              params: { id: dosen.id },
+                            }"
+                            @click="showModal"
+                          > -->
+                          <button @click="showModal(dosen.id)">
+                            <img
+                              src="~/assets/img/ic_delete.png"
+                              alt="Delete"
+                              class="w-[24px] col-span-1"
+                            />
+                          </button>
+                          <!-- </nuxt-link> -->
+                          <!-- Tambahkan event click untuk memunculkan modal -->
+                          <DeleteConfirmModal
+                            :id="currentId"
+                            :name="currentName"
+                            v-if="isModalOpen"
+                            @cancel="hideModal"
+                            @confirm="deleteDosenTetap"
                           />
                         </div>
                       </td>
@@ -190,6 +208,7 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue' // Impor komponen Sidebar
 import axios from 'axios' // Impor library axios
+import DeleteConfirmModal from '~/components/DeleteConfirmModal.vue' // Impor komponen DeleteConfirmModal
 
 export default {
   name: 'Index',
@@ -199,6 +218,9 @@ export default {
       totalDosenTetapAktif: [], // Inisialisasi data sebagai null
       totalDosenTetapNonAktif: [], // Inisialisasi data sebagai null
       dosenTetapData: [], // Inisialisasi array untuk menyimpan data Dosen Tetap
+      isModalOpen: false, // Inisialisasi status modal sebagai false
+      currentId: null, // Inisialisasi ID Dosen Tetap yang akan dihapus
+      currentName: '', // Inisialisasi nama Dosen Tetap yang akan dihapus
     }
   },
   mounted() {
@@ -206,6 +228,7 @@ export default {
   },
   components: {
     Sidebar, // Daftarkan komponen Sidebar di sini
+    DeleteConfirmModal, // Daftarkan komponen DeleteConfirmModal di sini
   },
   // Logika dan konten halaman
   methods: {
@@ -234,6 +257,41 @@ export default {
       } catch (error) {
         console.error('Error fetching Dosen Tetap data Total:', error)
       }
+    },
+    // Fungsi untuk menghapus data Dosen Tetap
+    showModal(id) {
+      const dosen = this.dosenTetapData.find((d) => d.id === id)
+      this.currentId = id
+      this.currentName = dosen ? dosen.nama : '' // Simpan nama dosen
+      this.isModalOpen = true
+    },
+
+    hideModal() {
+      this.isModalOpen = false
+    },
+
+    deleteDosenTetap(id) {
+      // Lakukan sesuatu untuk menghapus data Dosen Tetap
+      console.log(`Menghapus dosen dengan ID: ${id}`)
+      this.isModalOpen = false
+    },
+
+    async deleteDosenById(id) {
+      try {
+        await this.$axios.delete(`/dosentetap/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        // Jika berhasil, tutup modal dan refresh data
+        this.isModalOpen = false
+        this.fetchDosenTetapData()
+      } catch (error) {
+        console.error('Error deleting dosen:', error)
+      }
+    },
+    deleteDosenTetap(id) {
+      this.deleteDosenById(id)
     },
   },
 }

@@ -12,9 +12,7 @@
     </div>
 
     <div class="items-center justify-center mt-[19px]">
-      <p class="text-center text-title">
-        Edit Dosen Tetap {{ $route.params.id }}
-      </p>
+      <p class="text-center text-title">Edit Dosen Tetap</p>
     </div>
     <div class="flex justify-center justify-self-center mt-[5px]">
       <form class="w-full card" @submit.prevent="editDosenTetap">
