@@ -43,75 +43,12 @@
           </div>
         </div>
         <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-11">
-          <div class="card !gap-y-10 min-h-[200px]">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="overflow-hidden text-grey whitespace-nowrap">
-                  Dosen Tetap
-                </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  {{ totalAktifDosenTetap }}
-                </div>
-              </div>
-              <div>
-                <button>
-                  <a href="#">
-                    <img
-                      src="../assets/img/ic_tambah.png"
-                      alt=""
-                      class="pl-[10px] pt-[10px] w-[36px] h-[36px]"
-                    />
-                  </a>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="card !gap-y-10 min-h-[200px]">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="overflow-hidden text-grey whitespace-nowrap">
-                  Dosen Luar Biasa
-                </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  {{ totalAktifDosenLuarBiasa }}
-                </div>
-              </div>
-              <div>
-                <button>
-                  <a href="#">
-                    <img
-                      src="../assets/img/ic_tambah.png"
-                      alt=""
-                      class="pl-[10px] pt-[10px] w-[36px] h-[36px]"
-                    />
-                  </a>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="card !gap-y-10 min-h-[200px]">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="overflow-hidden text-grey whitespace-nowrap">
-                  Karyawan
-                </p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  {{ totalAktifKaryawan }}
-                </div>
-              </div>
-              <div>
-                <button>
-                  <a href="#">
-                    <img
-                      src="../assets/img/ic_tambah.png"
-                      alt=""
-                      class="pl-[10px] pt-[10px] w-[36px] h-[36px]"
-                    />
-                  </a>
-                </button>
-              </div>
-            </div>
-          </div>
+          <StatCard title="Dosen Tetap" :total="totalAktifDosenTetap" />
+          <StatCard
+            title="Dosen Luar Biasa"
+            :total="totalAktifDosenLuarBiasa"
+          />
+          <StatCard title="Karyawan" :total="totalAktifKaryawan" />
         </div>
       </section>
     </div>
@@ -120,81 +57,36 @@
 
 <script>
 import Sidebar from '~/components/Sidebar.vue' // Impor komponen Sidebar
-import axios from 'axios' // Impor library axios
 
 export default {
-  // middleware: 'authenticated',
   name: 'Index',
   data() {
     return {
-      totalAktifDosenTetap: 0, // Inisialisasi data sebagai null
-      totalAktifDosenLuarBiasa: 0, // Inisialisasi data sebagai null
-      totalAktifKaryawan: 0, // Inisialisasi data sebagai null
+      totalAktifDosenTetap: 0,
+      totalAktifDosenLuarBiasa: 0,
+      totalAktifKaryawan: 0,
     }
   },
   components: {
     Sidebar, // Daftarkan komponen Sidebar di sini
+    StatCard: () => import('~/components/StatCard.vue'), // Daftarkan komponen StatCard di sini
   },
   mounted() {
-    this.fetchDosenTetapData()
-    this.fetchDosenLuarBiasaData()
-    this.fetchKaryawanData()
-    if (localStorage.getItem('token') == null) this.$router.push('/auth/login')
+    this.fetchData('dosentetap', 'totalAktifDosenTetap')
+    this.fetchData('dosenlb', 'totalAktifDosenLuarBiasa')
+    this.fetchData('karyawan', 'totalAktifKaryawan')
   },
   methods: {
-    // cekToken() {
-    //   if (localStorage.getItem('token') == null) {
-    //     this.$router.push('/auth/login')
-    //   }
-    // },
-    async fetchDosenTetapData() {
-      console.log('Token:', this.token)
-      console.log(localStorage.getItem('token'), 'ini token')
+    async fetchData(endpoint, dataKey) {
       try {
-        const response = await this.$axios.get('dosentetap', {
+        const response = await this.$axios.get(endpoint, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
-        console.log('Dosen Tetap data response:', response)
-        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
-        this.totalAktifDosenTetap = response.data.data.total
+        this[dataKey] = response.data.data.total
       } catch (error) {
-        console.error('Error fetching Dosen Tetap data:', error)
-      }
-    },
-
-    async fetchDosenLuarBiasaData() {
-      console.log('Token:', this.token)
-      console.log(localStorage.getItem('token'), 'ini token')
-      try {
-        const response = await this.$axios.get('/dosenlb', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        console.log('Dosen Tetap data response:', response)
-        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
-        this.totalAktifDosenLuarBiasa = response.data.data.total
-      } catch (error) {
-        console.error('Error fetching Dosen Tetap data:', error)
-      }
-    },
-
-    async fetchKaryawanData() {
-      console.log('Token:', this.token)
-      console.log(localStorage.getItem('token'), 'ini token')
-      try {
-        const response = await this.$axios.get('/karyawan', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        console.log('karyawan response:', response)
-        // Lakukan sesuatu dengan data yang diterima, misalnya menyimpannya dalam data komponen
-        this.totalAktifKaryawan = response.data.data.total
-      } catch (error) {
-        console.error('Error fetching Karyawan:', error)
+        console.error(`Error fetching ${dataKey}:`, error)
       }
     },
   },

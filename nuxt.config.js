@@ -43,18 +43,15 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    // baseURL: 'https://testing-simaku-be.my.id/api',
+    baseURL: 'https://testing-simaku-be.my.id/api',
     //local
-    baseURL: 'http://127.0.0.1:8000/api',
+    // baseURL: 'http://127.0.0.1:8000/api',
   },
 
-  // routes: [
-  //   {
-  //     name: 'edit-dosen-tetap',
-  //     path: '/edit/:id',
-  //     component: '~/pages/manage-pegawai/dosen-tetap/edit.vue',
-  //   },
-  // ],
+  // Router configuration: https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-router
+  router: {
+    middleware: ['authenticated'],
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
