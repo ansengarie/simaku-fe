@@ -43,12 +43,21 @@
           </div>
         </div>
         <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-11">
-          <StatCard title="Dosen Tetap" :total="totalAktifDosenTetap" />
+          <StatCard
+            title="Dosen Tetap"
+            :total="totalAktifDosenTetap"
+            endpoint="dosen-tetap"
+          />
           <StatCard
             title="Dosen Luar Biasa"
             :total="totalAktifDosenLuarBiasa"
+            endpoint="dosen-lb"
           />
-          <StatCard title="Karyawan" :total="totalAktifKaryawan" />
+          <StatCard
+            title="Karyawan"
+            :total="totalAktifKaryawan"
+            endpoint="karyawan"
+          />
         </div>
       </section>
     </div>

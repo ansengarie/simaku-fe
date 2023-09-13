@@ -11,13 +11,13 @@
       </div>
       <div>
         <button>
-          <a href="#">
+          <nuxt-link :to="`manage-pegawai/${endpoint}`">
             <img
               src="../assets/img/ic_tambah.png"
-              alt=""
+              alt="Icon Tambah"
               class="pl-[10px] pt-[10px] w-[36px] h-[36px]"
             />
-          </a>
+          </nuxt-link>
         </button>
       </div>
     </div>
@@ -26,6 +26,6 @@
 
 <script>
 export default {
-  props: ['title', 'total'],
+  props: ['title', 'total', 'endpoint'],
 }
 </script>
