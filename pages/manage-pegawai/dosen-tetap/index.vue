@@ -98,9 +98,24 @@
                 <table class="w-full h-full table-auto">
                   <thead>
                     <tr class="border-b">
-                      <th class="px-4 py-2 font-head-tabel">No Pegawai</th>
-                      <th class="px-4 py-2 font-head-tabel">Nama Lengkap</th>
-                      <th class="px-4 py-2 font-head-tabel">Golongan</th>
+                      <th
+                        class="px-4 py-2 font-head-tabel"
+                        @click="handleSort('no_pegawai')"
+                      >
+                        No Pegawai
+                      </th>
+                      <th
+                        class="px-4 py-2 font-head-tabel"
+                        @click="handleSort('nama')"
+                      >
+                        Nama Lengkap
+                      </th>
+                      <th
+                        class="px-4 py-2 font-head-tabel"
+                        @click="handleSort('golongan')"
+                      >
+                        Golongan
+                      </th>
                       <th class="px-4 py-2 font-head-tabel">Status</th>
                       <th class="px-4 py-2 font-head-tabel">Jabatan</th>
                       <th class="px-4 py-2 font-head-tabel">Bank</th>
@@ -111,7 +126,7 @@
                     <!-- Gunakan v-for untuk mengulang data dari response -->
                     <tr
                       class="pt-[16px] border-b"
-                      v-for="dosen in dosenTetapData"
+                      v-for="dosen in paginatedData"
                       :key="dosen.id"
                     >
                       <td class="py-[16px]">{{ dosen.no_pegawai }}</td>
@@ -180,21 +195,31 @@
                 </table>
               </div>
               <div class="flex justify-between mt-auto px-[25px] py-[25px]">
-                <p class="text-muted">1 - 5 dari 4</p>
+                <p class="text-muted">
+                  {{ (currentPage - 1) * itemsPerPage + 1 }} -
+                  {{
+                    Math.min(currentPage * itemsPerPage, dosenTetapData.length)
+                  }}
+                  dari {{ dosenTetapData.length }}
+                </p>
                 <div class="flex justify-end"></div>
                 <div class="flex">
                   <p class="mr-[16px] text-muted">Halaman</p>
-                  <p class="mr-[20px] text-paging">1</p>
-                  <img
-                    src="~/assets/img/ic_nav-left.png"
-                    alt="Left Arrow"
-                    class="w-[24px] col-span-1 ml-[6px]"
-                  />
-                  <img
-                    src="~/assets/img/ic_nav-right.png"
-                    alt="Right Arrow"
-                    class="w-[24px] col-span-1 mr-[6px]"
-                  />
+                  <p class="mr-[20px] text-paging">{{ currentPage }}</p>
+                  <button @click="prevPage">
+                    <img
+                      src="~/assets/img/ic_nav-left.png"
+                      alt="Left Arrow"
+                      class="w-[24px] col-span-1 ml-[6px]"
+                    />
+                  </button>
+                  <button @click="nextPage">
+                    <img
+                      src="~/assets/img/ic_nav-right.png"
+                      alt="Right Arrow"
+                      class="w-[24px] col-span-1 mr-[6px]"
+                    />
+                  </button>
                 </div>
               </div>
             </div>
@@ -221,6 +246,10 @@ export default {
       isModalOpen: false, // Inisialisasi status modal sebagai false
       currentId: null, // Inisialisasi ID Dosen Tetap yang akan dihapus
       currentName: '', // Inisialisasi nama Dosen Tetap yang akan dihapus
+      currentPage: 1,
+      itemsPerPage: 10,
+      sortBy: null, // kolom yang akan disort
+      sortOrder: 'asc', // 'asc' untuk ascending, 'desc' untuk descending
     }
   },
   mounted() {
@@ -292,6 +321,44 @@ export default {
     },
     deleteDosenTetap(id) {
       this.deleteDosenById(id)
+    },
+    nextPage() {
+      if (this.currentPage < this.numberOfPages) {
+        this.currentPage++
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--
+      }
+    },
+    handleSort(column) {
+      if (this.sortBy === column) {
+        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
+      } else {
+        this.sortBy = column
+        this.sortOrder = 'asc'
+      }
+    },
+  },
+  computed: {
+    sortedData() {
+      if (!this.sortBy) return this.dosenTetapData
+      return [...this.dosenTetapData].sort((a, b) => {
+        if (this.sortOrder === 'asc') {
+          return a[this.sortBy] > b[this.sortBy] ? 1 : -1
+        } else {
+          return a[this.sortBy] < b[this.sortBy] ? 1 : -1
+        }
+      })
+    },
+    paginatedData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage
+      const end = start + this.itemsPerPage
+      return this.sortedData.slice(start, end)
+    },
+    numberOfPages() {
+      return Math.ceil(this.dosenTetapData.length / this.itemsPerPage)
     },
   },
 }
