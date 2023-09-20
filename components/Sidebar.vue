@@ -1,13 +1,24 @@
 <template>
   <!-- Sidebar -->
   <div
-    class="hidden lg:block fixed lg:max-w-[295px] w-full overflow-y-auto h-full bg-white z-[999]"
+    :class="[
+      showSidebar ? 'block' : 'hidden lg:block',
+      'fixed',
+      'lg:max-w-[295px]',
+      'w-full',
+      'overflow-y-auto',
+      'h-full',
+      'bg-white',
+      'z-[999]',
+    ]"
     id="sidebarHRIS"
   >
+    <button class="lg:hidden" @click="toggleSidebar">Toggle Sidebar</button>
+
     <div class="px-6 py-[50px] gap-y-[50px] flex flex-col">
       <div class="flex flex-col gap-4">
-        <a href="#" class="flex justify-center">
-          <img src="~/assets/img/logo-simaku-index.png" alt="" />
+        <a href="/" class="flex justify-center">
+          <img src="~/assets/img/logo-simaku-index.png" alt="Logo SIMAKU" />
         </a>
         <div class="pt-[43px] text-sm text-grey">Daily Use</div>
 
@@ -19,7 +30,7 @@
           :class="{ active: isActive('/') }"
         >
           <img
-            src="~/assets/img/fi_grid.png"
+            src="~/assets/img/fi_grids.png"
             alt="Employees"
             class="w-5 h-5 mr-2"
           />
@@ -59,13 +70,25 @@
         </a>
         <div v-if="isDropdownOpen['managePegawai']" class="ml-7">
           <!-- Dropdown content here -->
-          <nuxt-link to="/manage-pegawai/dosen-tetap" class="ml-5 nav-link">
+          <nuxt-link
+            to="/manage-pegawai/dosen-tetap"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/manage-pegawai/dosen-tetap') }"
+          >
             Dosen Tetap
           </nuxt-link>
-          <nuxt-link to="/manage-pegawai/dosen-lb" class="ml-5 nav-link">
+          <nuxt-link
+            to="/manage-pegawai/dosen-lb"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/manage-pegawai/dosen-lb') }"
+          >
             Dosen Luar Biasa
           </nuxt-link>
-          <nuxt-link to="/manage-pegawai/karyawan" class="ml-5 nav-link">
+          <nuxt-link
+            to="/manage-pegawai/karyawan"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/manage-pegawai/karyawan') }"
+          >
             Karyawan
           </nuxt-link>
         </div>
@@ -103,13 +126,25 @@
         </a>
         <div v-if="isDropdownOpen['gaji']" class="ml-7">
           <!-- Dropdown content here -->
-          <nuxt-link to="/gaji/dosen-tetap" class="ml-5 nav-link">
+          <nuxt-link
+            to="/gaji/dosen-tetap"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/gaji/dosen-tetap') }"
+          >
             Dosen Tetap
           </nuxt-link>
-          <nuxt-link to="/gaji/dosen-lb" class="ml-5 nav-link">
+          <nuxt-link
+            to="/gaji/dosen-lb"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/gaji/dosen-lb') }"
+          >
             Dosen Luar Biasa
           </nuxt-link>
-          <nuxt-link to="/gaji/karyawan" class="ml-5 nav-link">
+          <nuxt-link
+            to="/gaji/karyawan"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/gaji/karyawan') }"
+          >
             Karyawan
           </nuxt-link>
         </div>
@@ -148,19 +183,36 @@
           <nuxt-link
             to="/laporan/rekapitulasi-pendapatan"
             class="ml-5 nav-link"
+            :class="{ active: isActive('/laporan/rekapitulasi-pendapatan') }"
           >
             Rekapitulasi Pendapatan
           </nuxt-link>
-          <nuxt-link to="/laporan/pendapatan-bersih" class="ml-5 nav-link">
+          <nuxt-link
+            to="/laporan/pendapatan-bersih"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/laporan/pendapatan-bersih') }"
+          >
             Pendapatan Bersih
           </nuxt-link>
-          <nuxt-link to="/laporan/laporan-pajak" class="ml-5 nav-link">
+          <nuxt-link
+            to="/laporan/laporan-pajak"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/laporan/laporan-pajak') }"
+          >
             Laporan Pajak
           </nuxt-link>
-          <nuxt-link to="/laporan/laporan-potongan" class="ml-5 nav-link">
+          <nuxt-link
+            to="/laporan/laporan-potongan"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/laporan/laporan-potongan') }"
+          >
             Laporan Potongan
           </nuxt-link>
-          <nuxt-link to="/laporan/rekapitulasi-bank" class="ml-5 nav-link">
+          <nuxt-link
+            to="/laporan/rekapitulasi-bank"
+            class="ml-5 nav-link"
+            :class="{ active: isActive('/laporan/rekapitulasi-bank') }"
+          >
             Rekapitulasi Bank
           </nuxt-link>
         </div>
@@ -199,6 +251,7 @@ export default {
   name: 'Sidebar',
   data() {
     return {
+      showSidebar: false,
       isDropdownOpen: {
         managePegawai: false,
         gaji: false,
@@ -208,8 +261,14 @@ export default {
     }
   },
   methods: {
+    toggleSidebar() {
+      this.showSidebar = !this.showSidebar
+    },
     isActive(url) {
-      return this.$route.path === url
+      if (url === '/') {
+        return this.$route.path === url
+      }
+      return this.$route.path.startsWith(url)
     },
     toggleDropdown(category) {
       this.$set(this.isDropdownOpen, category, !this.isDropdownOpen[category])
@@ -228,6 +287,26 @@ export default {
       // Setelah logout, Anda dapat mengarahkan pengguna kembali ke halaman login atau halaman lain yang sesuai.
       this.showModal = false
       console.log('Logout berhasil!')
+    },
+  },
+  watch: {
+    $route: {
+      immediate: true, // menjalankan watcher saat komponen dibuat
+      handler(to) {
+        // Reset semua dropdown
+        for (let key in this.isDropdownOpen) {
+          this.isDropdownOpen[key] = false
+        }
+
+        // Atur dropdown berdasarkan rute
+        if (to.path.startsWith('/manage-pegawai/')) {
+          this.isDropdownOpen['managePegawai'] = true
+        } else if (to.path.startsWith('/gaji/')) {
+          this.isDropdownOpen['gaji'] = true
+        } else if (to.path.startsWith('/laporan/')) {
+          this.isDropdownOpen['laporan'] = true
+        }
+      },
     },
   },
 }
