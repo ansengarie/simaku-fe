@@ -31,7 +31,7 @@
         <img src="~/assets/img/logo-simaku-index.png" class="mx-[50px]" />
       </div>
       <div class="flex justify-end justify-self-end">
-        <nuxt-link to="/manage-pegawai/dosen-tetap">
+        <nuxt-link to="/manage-pegawai/dosen-lb">
           <img src="~/assets/img/btn_close.png" class="mx-[50px]" />
         </nuxt-link>
       </div>
@@ -45,7 +45,7 @@
     ></flashMessage>
 
     <div class="items-center justify-center mt-[19px]">
-      <p class="text-center text-title">Edit Dosen Tetap</p>
+      <p class="text-center text-title">Edit Dosen Luar Biasa</p>
     </div>
     <div class="flex justify-center justify-self-center mt-[5px]">
       <form class="w-full card" @submit.prevent="editDosenTetap">
@@ -113,7 +113,7 @@
         </div>
         <div class="flex justify-between mt-[43px] mb-[40px] w-[570]">
           <nuxt-link
-            to="/manage-pegawai/dosen-tetap"
+            to="/manage-pegawai/dosen-lb"
             class="btn btn-primary w-[260px] h-[46px] mr-[51px] bg-red-700"
           >
             Batal
@@ -158,7 +158,7 @@ export default {
     async getDosenTetap() {
       try {
         const response = await this.$axios.$get(
-          `/dosentetap?id=${this.$route.params.id}`,
+          `/dosenlb?id=${this.$route.params.id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -184,7 +184,7 @@ export default {
     async editDosenTetap() {
       try {
         const response = await this.$axios.post(
-          `/dosentetap/update/${this.$route.params.id}`,
+          `/dosenlb/update/${this.$route.params.id}`,
           {
             no_pegawai: this.no_pegawai,
             nama: this.nama,
@@ -212,10 +212,10 @@ export default {
         setTimeout(() => {
           // Menghilangkan indikator loading
           this.isLoading = false
-          this.$router.push('/manage-pegawai/dosen-tetap')
+          this.$router.push('/manage-pegawai/dosen-lb')
         }, 2000)
       } catch (error) {
-        console.error('Error edit Dosen Tetap:', error)
+        console.error('Error edit Dosen Luar Biasa:', error)
         this.flashType = 'error'
         this.flashMsg = 'Terjadi kesalahan saat mengubah data dosen.'
       }

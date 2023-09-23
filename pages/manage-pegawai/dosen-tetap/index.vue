@@ -95,104 +95,140 @@
           <div>
             <div class="card min-h-[468px] max-w-[1078px]">
               <div class="text-center">
-                <table class="w-full h-full table-auto">
-                  <thead>
-                    <tr class="border-b">
-                      <th
-                        class="px-4 py-2 font-head-tabel"
-                        @click="handleSort('no_pegawai')"
-                      >
-                        No Pegawai
-                      </th>
-                      <th
-                        class="px-4 py-2 font-head-tabel"
-                        @click="handleSort('nama')"
-                      >
-                        Nama Lengkap
-                      </th>
-                      <th
-                        class="px-4 py-2 font-head-tabel"
-                        @click="handleSort('golongan')"
-                      >
-                        Golongan
-                      </th>
-                      <th class="px-4 py-2 font-head-tabel">Status</th>
-                      <th class="px-4 py-2 font-head-tabel">Jabatan</th>
-                      <th class="px-4 py-2 font-head-tabel">Bank</th>
-                      <th class="px-4 py-2 font-head-tabel">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody class="pt-[16px]">
-                    <!-- Gunakan v-for untuk mengulang data dari response -->
-                    <tr
-                      class="pt-[16px] border-b"
-                      v-for="dosen in paginatedData"
-                      :key="dosen.id"
-                    >
-                      <td class="py-[16px]">{{ dosen.no_pegawai }}</td>
-                      <td>{{ dosen.nama }}</td>
-                      <td>{{ dosen.golongan }}</td>
-                      <td>
-                        <!-- Gunakan v-bind untuk mengatur kelas sesuai dengan status -->
-                        <p
-                          :class="{
-                            'bg-green-400 rounded-full w-[60px] m-auto text-green-700 font-bold':
-                              dosen.status === 'AKTIF' ||
-                              dosen.status === 'aktif' ||
-                              dosen.status === 'Aktif',
-                            'bg-red-400 rounded-full w-[110px] m-auto text-red-700 font-bold':
-                              dosen.status === 'TIDAK AKTIF' ||
-                              dosen.status === 'tidak aktif' ||
-                              dosen.status === 'Tidak Aktif',
-                          }"
+                <div v-if="dosenTetapData && dosenTetapData.length">
+                  <table class="w-full h-full table-auto">
+                    <thead>
+                      <tr class="border-b">
+                        <th
+                          class="px-4 py-2 font-head-tabel"
+                          @click="handleSort('no_pegawai')"
+                          title="Klik untuk mengurutkan"
                         >
-                          {{ dosen.status }}
-                        </p>
-                      </td>
-                      <td>{{ dosen.jabatan }}</td>
-                      <td>{{ dosen.nama_bank }}</td>
-                      <td>
-                        <div class="flex justify-center">
-                          <nuxt-link
-                            :to="{
-                              name: 'manage-pegawai-dosen-tetap-edit',
-                              params: { id: dosen.id },
+                          No Pegawai
+                          <i
+                            v-if="
+                              sortBy === 'no_pegawai' && sortOrder === 'asc'
+                            "
+                            class="fas fa-arrow-up"
+                          ></i>
+                          <i
+                            v-if="
+                              sortBy === 'no_pegawai' && sortOrder === 'desc'
+                            "
+                            class="fas fa-arrow-down"
+                          ></i>
+                        </th>
+                        <th
+                          class="px-4 py-2 font-head-tabel"
+                          @click="handleSort('nama')"
+                          title="Klik untuk mengurutkan"
+                        >
+                          Nama Lengkap
+                          <i
+                            v-if="sortBy === 'nama' && sortOrder === 'asc'"
+                            class="fas fa-arrow-up"
+                          ></i>
+                          <i
+                            v-if="sortBy === 'nama' && sortOrder === 'desc'"
+                            class="fas fa-arrow-down"
+                          ></i>
+                        </th>
+                        <th
+                          class="px-4 py-2 font-head-tabel"
+                          @click="handleSort('golongan')"
+                          title="Klik untuk mengurutkan"
+                        >
+                          Golongan
+                          <i
+                            v-if="sortBy === 'golongan' && sortOrder === 'asc'"
+                            class="fas fa-arrow-up"
+                          ></i>
+                          <i
+                            v-if="sortBy === 'golongan' && sortOrder === 'desc'"
+                            class="fas fa-arrow-down"
+                          ></i>
+                        </th>
+                        <th class="px-4 py-2 font-head-tabel">Status</th>
+                        <th class="px-4 py-2 font-head-tabel">Jabatan</th>
+                        <th class="px-4 py-2 font-head-tabel">Bank</th>
+                        <th class="px-4 py-2 font-head-tabel">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody class="pt-[16px]">
+                      <!-- Gunakan v-for untuk mengulang data dari response -->
+                      <tr
+                        class="pt-[16px] border-b"
+                        v-for="dosen in paginatedData"
+                        :key="dosen.id"
+                      >
+                        <td class="py-[16px]">{{ dosen.no_pegawai }}</td>
+                        <td>{{ dosen.nama }}</td>
+                        <td>{{ dosen.golongan }}</td>
+                        <td>
+                          <!-- Gunakan v-bind untuk mengatur kelas sesuai dengan status -->
+                          <p
+                            :class="{
+                              'bg-green-400 rounded-full w-[60px] m-auto text-green-700 font-bold':
+                                dosen.status === 'AKTIF' ||
+                                dosen.status === 'aktif' ||
+                                dosen.status === 'Aktif',
+                              'bg-red-400 rounded-full w-[110px] m-auto text-red-700 font-bold':
+                                dosen.status === 'TIDAK AKTIF' ||
+                                dosen.status === 'tidak aktif' ||
+                                dosen.status === 'Tidak Aktif',
                             }"
                           >
-                            <img
-                              src="~/assets/img/ic_edit.png"
-                              alt="Edit Icon"
-                              class="w-[24px] col-span-1"
-                            />
-                          </nuxt-link>
-                          <!-- <nuxt-link
+                            {{ dosen.status }}
+                          </p>
+                        </td>
+                        <td>{{ dosen.jabatan }}</td>
+                        <td>{{ dosen.nama_bank }}</td>
+                        <td>
+                          <div class="flex justify-center">
+                            <nuxt-link
+                              :to="{
+                                name: 'manage-pegawai-dosen-tetap-edit',
+                                params: { id: dosen.id },
+                              }"
+                            >
+                              <img
+                                src="~/assets/img/ic_edit.png"
+                                alt="Edit Icon"
+                                class="w-[24px] col-span-1"
+                              />
+                            </nuxt-link>
+                            <!-- <nuxt-link
                             :to="{
                               name: 'manage-pegawai-dosen-tetap-delete',
                               params: { id: dosen.id },
                             }"
                             @click="showModal"
                           > -->
-                          <button @click="showModal(dosen.id)">
-                            <img
-                              src="~/assets/img/ic_delete.png"
-                              alt="Delete"
-                              class="w-[24px] col-span-1"
+                            <button @click="showModal(dosen.id)">
+                              <img
+                                src="~/assets/img/ic_delete.png"
+                                alt="Delete"
+                                class="w-[24px] col-span-1"
+                              />
+                            </button>
+                            <!-- </nuxt-link> -->
+                            <!-- Tambahkan event click untuk memunculkan modal -->
+                            <DeleteConfirmModal
+                              :id="currentId"
+                              :name="currentName"
+                              v-if="isModalOpen"
+                              @cancel="hideModal"
+                              @confirm="deleteDosenTetap"
                             />
-                          </button>
-                          <!-- </nuxt-link> -->
-                          <!-- Tambahkan event click untuk memunculkan modal -->
-                          <DeleteConfirmModal
-                            :id="currentId"
-                            :name="currentName"
-                            v-if="isModalOpen"
-                            @cancel="hideModal"
-                            @confirm="deleteDosenTetap"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div v-else class="my-5 text-center">
+                  <p>Tidak ada data dosen tetap.</p>
+                </div>
               </div>
               <div class="flex justify-between mt-auto px-[25px] py-[25px]">
                 <p class="text-muted">
@@ -365,5 +401,8 @@ export default {
 </script>
 
 <style>
-/* Gaya untuk konten utama */
+.font-head-tabel i {
+  margin-left: 8px; /* Jarak antara teks dengan icon */
+  font-size: 0.8em; /* Ukuran icon */
+}
 </style>

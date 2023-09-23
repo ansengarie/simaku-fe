@@ -13,8 +13,6 @@
     ]"
     id="sidebarHRIS"
   >
-    <button class="lg:hidden" @click="toggleSidebar">Toggle Sidebar</button>
-
     <div class="px-6 py-[50px] gap-y-[50px] flex flex-col">
       <div class="flex flex-col gap-4">
         <a href="/" class="flex justify-center">
@@ -261,9 +259,6 @@ export default {
     }
   },
   methods: {
-    toggleSidebar() {
-      this.showSidebar = !this.showSidebar
-    },
     isActive(url) {
       if (url === '/') {
         return this.$route.path === url
