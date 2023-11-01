@@ -183,7 +183,7 @@ export default {
     // Method untuk mengedit data dosen tetap
     async editDosenTetap() {
       try {
-        const response = await this.$axios.post(
+        const response = await this.$axios.put(
           `/dosenlb/update/${this.$route.params.id}`,
           {
             no_pegawai: this.no_pegawai,
