@@ -12,7 +12,7 @@
         <div class="flex items-center justify-between gap-4">
           <a href="#" id="toggleOpenSidebar" class="lg:hidden"> </a>
           <div class="text-[32px] font-semibold text-dark">
-            Transaksi Gaji Dosen Tetap
+            Transaksi Gaji Dosen Luar Biasa
           </div>
         </div>
         <div class="flex items-center gap-4">
@@ -112,7 +112,7 @@
                           <div class="flex justify-center">
                             <nuxt-link
                               :to="{
-                                name: 'gaji-dosen-tetap-id-createGaji',
+                                name: 'gaji-dosen-tetap-id-create',
                                 params: { id: dosen.id },
                               }"
                               class="mr-[7px]"
@@ -125,7 +125,7 @@
                             </nuxt-link>
                             <nuxt-link
                               :to="{
-                                name: 'gaji-dosen-tetap-id-detailsGaji',
+                                name: 'gaji-dosen-lb-id-detail',
                                 params: { id: dosen.id },
                               }"
                             >
@@ -142,7 +142,7 @@
                   </table>
                 </div>
                 <div v-else class="my-5 text-center">
-                  <p>Tidak ada data dosen tetap.</p>
+                  <p>Tidak ada data dosen luar biasa.</p>
                 </div>
               </div>
               <div class="flex justify-between mt-auto px-[25px] py-[25px]">
@@ -209,7 +209,7 @@ export default {
   methods: {
     async fetchDosenTetapData() {
       try {
-        const response = await this.$axios.get('dosentetap', {
+        const response = await this.$axios.get('dosenlb', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

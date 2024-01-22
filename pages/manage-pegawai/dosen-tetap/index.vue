@@ -187,7 +187,7 @@
                           <div class="flex justify-center">
                             <nuxt-link
                               :to="{
-                                name: 'manage-pegawai-dosen-tetap-edit',
+                                name: 'manage-pegawai-dosen-tetap-id-edit',
                                 params: { id: dosen.id },
                               }"
                             >
@@ -195,6 +195,7 @@
                                 src="~/assets/img/ic_edit.png"
                                 alt="Edit Icon"
                                 class="w-[24px] col-span-1"
+                                title="Edit"
                               />
                             </nuxt-link>
                             <!-- <nuxt-link
@@ -209,6 +210,7 @@
                                 src="~/assets/img/ic_delete.png"
                                 alt="Delete"
                                 class="w-[24px] col-span-1"
+                                title="Hapus"
                               />
                             </button>
                             <!-- </nuxt-link> -->
@@ -276,8 +278,8 @@ export default {
   data() {
     return {
       totalAktifDosenTetap: 0, // Inisialisasi data sebagai null
-      totalDosenTetapAktif: [], // Inisialisasi data sebagai null
-      totalDosenTetapNonAktif: [], // Inisialisasi data sebagai null
+      totalDosenTetapAktif: 0, // Inisialisasi data sebagai null
+      totalDosenTetapNonAktif: 0, // Inisialisasi data sebagai null
       dosenTetapData: [], // Inisialisasi array untuk menyimpan data Dosen Tetap
       isModalOpen: false, // Inisialisasi status modal sebagai false
       currentId: null, // Inisialisasi ID Dosen Tetap yang akan dihapus

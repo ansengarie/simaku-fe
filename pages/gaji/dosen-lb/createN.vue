@@ -112,31 +112,7 @@
 </template>
 
 <script>
-import InputField from '~/components/InputField.vue'
-
 export default {
-  head() {
-    return {
-      title: 'Tambah Transaksi Gaji Dosen Tetap',
-    }
-  },
-  components: {},
-  data() {
-    return {
-      gaji_pokok: '',
-      tj_fungsional: '',
-      tj_struktural: '',
-      tj_khs_istimewa: '',
-      tj_pres_kerja: '',
-      tj_tambahan: '',
-      u_lembur_hk: '',
-      honor_univ: '',
-      u_lembur_hl: '',
-      tj_suami_istri: '',
-      trans_kehadiran: '',
-      tj_anak: '',
-    }
-  },
   async asyncData({ params, $axios }) {
     let dosenData = {}
 
@@ -155,45 +131,6 @@ export default {
     }
 
     return { dosenData, dosen_tetap_id: params.id }
-  },
-  methods: {
-    async tambahGajiPusat() {
-      try {
-        const payload = {
-          dosen_tetap_id: this.dosen_tetap_id,
-          gaji_pokok: this.gaji_pokok,
-          tj_fungsional: this.tj_fungsional,
-          tj_struktural: this.tj_struktural,
-          tj_khs_istimewa: this.tj_khs_istimewa,
-          tj_pres_kerja: this.tj_pres_kerja,
-          tj_tambahan: this.tj_tambahan,
-          u_lembur_hk: this.u_lembur_hk,
-          honor_univ: this.honor_univ,
-          u_lembur_hl: this.u_lembur_hl,
-          tj_suami_istri: this.tj_suami_istri,
-          trans_kehadiran: this.trans_kehadiran,
-          tj_anak: this.tj_anak,
-        }
-
-        const token = localStorage.getItem('token')
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        }
-
-        const response = await this.$axios.post(
-          'dosentetap-gajiuniv/create',
-          payload,
-          {
-            headers: headers,
-          }
-        )
-
-        // Handle response sesuai kebutuhan Anda. Contoh:
-        this.$router.push('/gaji/dosen-tetap')
-      } catch (error) {
-        console.error('Error tambah Gaji Dosen Tetap:', error)
-      }
-    },
   },
 }
 </script>

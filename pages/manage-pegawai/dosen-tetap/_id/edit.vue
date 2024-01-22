@@ -37,9 +37,6 @@
       </div>
     </div>
 
-    <div class="items-center justify-center mt-[19px]">
-      <p class="text-center text-title">Tambah Dosen Tetap</p>
-    </div>
     <flashMessage
       :type="flashType"
       :message="flashMsg"
@@ -47,20 +44,18 @@
       @clearMessage="clearFlashMessage"
     ></flashMessage>
 
+    <div class="items-center justify-center mt-[19px]">
+      <p class="text-center text-title">Edit Dosen Tetap</p>
+    </div>
     <div class="flex justify-center justify-self-center mt-[5px]">
-      <form class="w-full card" @submit.prevent="tambahDosenTetap">
+      <form class="w-full card" @submit.prevent="editDosenTetap">
         <div class="form-group">
           <label for="" class="text-grey">Nomor Pegawai</label>
-          <input
-            type="text"
-            class="input-field"
-            v-model="no_pegawai"
-            required
-          />
+          <input type="text" class="input-field" v-model="no_pegawai" />
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Nama Lengkap</label>
-          <input type="text" class="input-field" v-model="nama" required />
+          <input type="text" class="input-field" v-model="nama" />
         </div>
         <div class="form-group">
           <label for="" class="text-grey">NPWP</label>
@@ -68,7 +63,7 @@
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Golongan</label>
-          <select class="input-field" v-model="golongan" required>
+          <select class="input-field" v-model="golongan">
             <option value="IIA">II A</option>
             <option value="IIB">II B</option>
             <option value="IIC">II C</option>
@@ -86,53 +81,42 @@
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Status</label>
-          <select class="input-field" v-model="status" required>
+          <select class="input-field" v-model="status">
             <option value="Aktif">Aktif</option>
             <option value="Tidak Aktif">Tidak Aktif</option>
           </select>
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Jabatan</label>
-          <input type="text" class="input-field" v-model="jabatan" required />
+          <input type="text" class="input-field" v-model="jabatan" />
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Alamat KTP</label>
-          <input
-            type="text"
-            class="input-field"
-            v-model="alamat_KTP"
-            required
-          />
+          <input type="text" class="input-field" v-model="alamat_KTP" />
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Alamat Saat Ini</label>
-          <input
-            type="text"
-            class="input-field"
-            v-model="alamat_saat_ini"
-            required
-          />
+          <input type="text" class="input-field" v-model="alamat_saat_ini" />
         </div>
-        <!-- <div class="form-group">
-          <label for="" class="text-grey">Nama Bank</label>
-          <select class="input-field" v-model="nama_bank">
-            <option value="BNI">BNI</option>
-            <option value="BCA">BCA</option>
-            <option value="BRI">BRI</option>
-            <option value="Mandiri">Mandiri</option>
+        <div class="form-group">
+          <label for="" class="text-grey">Nama Bank Utama</label>
+          <select class="input-field" v-model="selectedBankUtama">
+            <option value="Bank BCA">Bank BCA</option>
+            <option value="Bank Mandiri">Bank Mandiri</option>
+            <option value="Bank BRI">Bank BRI</option>
+            <option value="Bank BNI">Bank BNI</option>
+            <option value="Bank CIMB Niaga">Bank CIMB Niaga</option>
+            <option value="Bank Danamon">Bank Danamon</option>
+            <option value="Bank Panin">Bank Panin</option>
+            <option value="Bank Maybank">Bank Maybank</option>
+            <option value="Bank OCBC NISP">Bank OCBC NISP</option>
+            <option value="Bank Permata">Bank Permata</option>
+            <option value="Bank Syariah Indonesia">
+              Bank Syariah Indonesia
+            </option>
           </select>
-        </div> -->
+        </div>
         <div v-if="banks && banks.length">
-          <div class="form-group">
-            <bank-dropdown
-              :banks="banks"
-              v-model="selectedBankUtama"
-              formLabel="Nama Bank Utama"
-              formId="bankUtama"
-              class="text-grey"
-              @update:selectedBank="selectedBankUtama = $event"
-            />
-          </div>
           <div class="form-group">
             <label for="" class="text-grey">Nomor Rekening Utama</label>
             <input
@@ -146,15 +130,22 @@
             />
           </div>
           <div class="form-group">
-            <bank-dropdown
-              :banks="banks"
-              v-model="selectedBankTambahan"
-              formLabel="Nama Bank Tambahan"
-              formId="bankTambahan"
-              class="text-grey"
-              @update:selectedBank="selectedBankTambahan = $event"
-              :disabled="!selectedBankUtama"
-            />
+            <label for="" class="text-grey">Nama Bank Tambahan</label>
+            <select class="input-field" v-model="selectedBankTambahan">
+              <option value="Bank BCA">Bank BCA</option>
+              <option value="Bank Mandiri">Bank Mandiri</option>
+              <option value="Bank BRI">Bank BRI</option>
+              <option value="Bank BNI">Bank BNI</option>
+              <option value="Bank CIMB Niaga">Bank CIMB Niaga</option>
+              <option value="Bank Danamon">Bank Danamon</option>
+              <option value="Bank Panin">Bank Panin</option>
+              <option value="Bank Maybank">Bank Maybank</option>
+              <option value="Bank OCBC NISP">Bank OCBC NISP</option>
+              <option value="Bank Permata">Bank Permata</option>
+              <option value="Bank Syariah Indonesia">
+                Bank Syariah Indonesia
+              </option>
+            </select>
           </div>
           <div class="form-group">
             <label for="" class="text-grey"
@@ -171,22 +162,10 @@
             />
           </div>
         </div>
-
         <div class="form-group">
           <label for="" class="text-grey">Nomor Handphone</label>
-          <input type="text" class="input-field" v-model="nomor_hp" required />
+          <input type="text" class="input-field" v-model="nomor_hp" />
         </div>
-
-        <!-- <div class="form-group" v-for="(schema, index) in schemas" :key="index">
-          <label for="" class="text-grey">{{ schema.label }}</label>
-          <input type="text" class="input-field" v-model="schema.value" />
-        </div>
-
-        <div class="form-group">
-          <label for="" class="text-grey">Hasil</label>
-          <input type="text" class="input-field" :value="hasil" readonly />
-        </div> -->
-
         <div class="flex justify-between mt-[43px] mb-[40px] w-[570]">
           <nuxt-link
             to="/manage-pegawai/dosen-tetap"
@@ -195,7 +174,7 @@
             Batal
           </nuxt-link>
           <button type="submit" class="btn btn-primary h-[46px] w-[260px]">
-            Tambah
+            Simpan
           </button>
         </div>
       </form>
@@ -205,93 +184,115 @@
 
 <script>
 import banksData from '~/static/banks.js'
-import BankDropdown from '~/components/BankDropdown.vue'
 export default {
-  name: 'IndexPage',
+  name: 'EditPage',
   components: {
     flashMessage: () => import('~/components/FlashMessage.vue'),
-    BankDropdown,
   },
   data() {
     return {
       no_pegawai: '',
       nama: '',
-      npwp: '',
       golongan: '',
+      npwp: '',
       status: '',
       jabatan: '',
       alamat_KTP: '',
       alamat_saat_ini: '',
-      nama_bank: '',
-      nomor_hp: '',
-      flashType: '', // 'success' atau 'error'
-      flashMsg: '',
-      isLoading: false,
-      schemas: [
-        { label: 'Gaji 1', value: 5 },
-        { label: 'Gaji 2', value: 10 },
-      ],
-      // banks: banksData, // Menggunakan data dari banks.js
-
       selectedBankUtama: '',
       norek_bank_utama: '',
       selectedBankTambahan: '',
       norek_bank_tambahan: '',
-      newDosenTetapId: null,
+      nomor_hp: '',
+      flashType: '', // 'success' atau 'error'
+      flashMsg: '',
+      isLoading: false,
+      idBankUtama: '',
+      idBankTambahan: '',
     }
   },
+  mounted() {
+    this.getDosenTetap()
+  },
   methods: {
-    async tambahDosenTetap() {
+    // Method untuk mengambil data dosen tetap dari API
+    async getDosenTetap() {
       try {
-        const idBankUtama = this.banks.find(
-          (bank) => bank.label === this.selectedBankUtama
-        )?.value
-        const idBankTambahan = this.banks.find(
-          (bank) => bank.label === this.selectedBankTambahan
-        )?.value
+        const token = localStorage.getItem('token')
 
-        // Menampilkan informasi di console log
-        console.log('Selected Bank Utama:', this.selectedBankUtama)
-        console.log('Selected Bank Tambahan:', this.selectedBankTambahan)
-
-        const dataToPost = {
-          nama: this.nama,
-          no_pegawai: this.no_pegawai,
-          npwp: this.npwp,
-          status: this.status,
-          golongan: this.golongan,
-          jabatan: this.jabatan,
-          alamat_KTP: this.alamat_KTP,
-          alamat_saat_ini: this.alamat_saat_ini,
-          nomor_hp: this.nomor_hp,
-          banks: [
-            {
-              nama_bank: this.selectedBankUtama,
-              no_rekening: this.norek_bank_utama,
-            },
-            {
-              nama_bank: this.selectedBankTambahan,
-              no_rekening: this.norek_bank_tambahan,
-            },
-          ],
+        if (!token) {
+          console.error('Token tidak ditemukan!')
+          // Handle kasus ketika token tidak ditemukan, misalnya, redirect ke halaman login.
+          return
         }
-
-        // Menampilkan data yang akan dikirim ke API di console log
-        console.log('Data to post:', dataToPost)
-
-        // console.log(this.hasil)
-        const response = await this.$axios.post(
-          'dosentetap/create',
-          dataToPost,
+        console.log(localStorage.getItem('token'), 'ini token')
+        const response = await this.$axios.$get(
+          `/dosentetap?id=${this.$route.params.id}`,
           {
             headers: {
-              'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           }
         )
+        console.log(response, 'response')
+        console.log(this.$route.params.id, 'id')
+        this.no_pegawai = response.data.no_pegawai
+        this.nama = response.data.nama
+        this.npwp = response.data.npwp
+        this.golongan = response.data.golongan
+        this.status = response.data.status
+        this.jabatan = response.data.jabatan
+        this.alamat_KTP = response.data.alamat_KTP
+        this.alamat_saat_ini = response.data.alamat_saat_ini
+        this.idBankUtama = response.data.banks[0].id
+        this.selectedBankUtama = response.data.banks[0].nama_bank
+        this.norek_bank_utama = response.data.banks[0].no_rekening
+        this.idBankTambahan = response.data.banks[1].id
+        this.selectedBankTambahan = response.data.banks[1].nama_bank
+        this.norek_bank_tambahan = response.data.banks[1].no_rekening
+        this.nomor_hp = response.data.nomor_hp
+        console.log(this.selectedBankUtama)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // Method untuk mengedit data dosen tetap
+    async editDosenTetap() {
+      try {
+        const response = await this.$axios.put(
+          `/dosentetap/update/${this.$route.params.id}`,
+          {
+            nama: this.nama,
+            no_pegawai: this.no_pegawai,
+            npwp: this.npwp,
+            status: this.status,
+            golongan: this.golongan,
+            jabatan: this.jabatan,
+            alamat_KTP: this.alamat_KTP,
+            alamat_saat_ini: this.alamat_saat_ini,
+            nomor_hp: this.nomor_hp,
+            banks: [
+              {
+                id: this.idBankUtama,
+                nama_bank: this.selectedBankUtama,
+                no_rekening: this.norek_bank_utama,
+              },
+              {
+                id: this.idBankTambahan,
+                nama_bank: this.selectedBankTambahan,
+                no_rekening: this.norek_bank_tambahan,
+              },
+            ],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
+        console.log(localStorage.getItem('token'), 'ini token put')
         this.flashType = 'success'
-        this.flashMsg = 'Data dosen berhasil ditambahkan!'
+        this.flashMsg = 'Data dosen berhasil diubah!'
         // Menampilkan indikator loading
         this.isLoading = true
 
@@ -299,42 +300,20 @@ export default {
         setTimeout(() => {
           // Menghilangkan indikator loading
           this.isLoading = false
-
-          // Mengalihkan ke halaman yang diinginkan
           this.$router.push('/manage-pegawai/dosen-tetap')
         }, 2000)
       } catch (error) {
-        console.error('Error tambah Dosen Tetap:', error)
-        console.error('Error tambah Dosen Tetap:', error.response)
+        console.error('Error edit Dosen Tetap:', error)
         this.flashType = 'error'
-        this.flashMsg = 'Terjadi kesalahan saat menambahkan data dosen.'
+        this.flashMsg = 'Terjadi kesalahan saat mengubah data dosen.'
       }
     },
     clearFlashMessage() {
       this.flashType = ''
       this.flashMsg = ''
     },
-    handleSelectedBankUtama(newValue) {
-      // Handle the selected bank value here
-      this.selectedBankUtama = newValue
-    },
-    handleSelectedBankTambahan(newValue) {
-      // Handle the selected bank value here
-      this.selectedBankTambahan = newValue
-    },
-    handleSomeEvent() {
-      console.log('Selected Bank Utama:', this.selectedBankUtama)
-      console.log('Selected Bank Tambahan:', this.selectedBankTambahan)
-      this.tambahDosenTetap()
-    },
   },
   computed: {
-    // Computed property named "count", depending on the
-    // "text" variable
-    hasil() {
-      let hasil = Number(this.schemas[0].value) + Number(this.schemas[1].value)
-      return hasil
-    },
     banks() {
       return banksData
     },
