@@ -56,6 +56,7 @@
             </button>
 
             <select v-model="tempPeriodeTerpilih" class="text-sm input-field">
+              <option disabled value="" selected>Pilih Periode</option>
               <option
                 v-for="periode in periodePajak"
                 :key="periode"

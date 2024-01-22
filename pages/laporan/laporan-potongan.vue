@@ -106,7 +106,7 @@
                     scope="col"
                     class="px-6 py-3"
                   >
-                    {{ header }}
+                    {{ formatHeader(header) }}
                   </th>
                 </tr>
               </thead>
@@ -234,7 +234,7 @@ export default {
         const potonganKeys = Object.keys(
           this.filteredLaporanPotongan[0].potongan
         )
-        return ['No Pegawai', 'Nama', ...potonganKeys]
+        return ['No Pegawai', 'Nama', ...potonganKeys.map(this.formatHeader)]
       }
       return []
     },
@@ -351,10 +351,12 @@ export default {
       csvContent += headers.join(',') + '\r\n'
 
       this.getFilteredData().forEach((item) => {
-        const row = headers.map(header => {
-          let value = item[header] ?? item.potongan[header] ?? '' // Akses nilai dari potongan atau langsung
-          return `"${value}"`
-        }).join(',')
+        const row = headers
+          .map((header) => {
+            let value = item[header] ?? item.potongan[header] ?? '' // Akses nilai dari potongan atau langsung
+            return `"${value}"`
+          })
+          .join(',')
 
         csvContent += row + '\r\n'
       })
@@ -382,44 +384,46 @@ export default {
       console.log(filteredData)
       return filteredData
     },
+    formatHeader(header) {
+      return header
+        .split('_')
+        .map((word) => {
+          // Ubah huruf pertama menjadi uppercase dan sisanya menjadi lowercase
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        })
+        .join(' ')
+    },
 
     generateExcel() {
       const wb = XLSX.utils.book_new()
-      const filteredData = this.getFilteredDataForExcel()
-
-      const dataToExport = filteredData.map((item) => {
-        // Inisialisasi objek untuk baris data Excel
-        const row = {}
-
-        // Sesuaikan pemetaan key dan header berdasarkan jenis pegawai
-        const keyMap = this.getKeyMap()
-
-        // Isi row dengan data yang sesuai dari item
-        Object.keys(keyMap).forEach((header) => {
-          const key = keyMap[header]
-          if (typeof key === 'function') {
-            // Untuk key yang memerlukan akses fungsi khusus
-            row[header] = key(item)
-          } else {
-            // Untuk key dengan akses langsung
-            row[header] = item[key] ?? ''
-          }
-        })
-
-        return row
-      })
-
-      const ws = XLSX.utils.json_to_sheet(dataToExport)
-
-      // Tambahkan sheet ke workbook
+      const dataForExcel = this.getFilteredDataForExcel()
+      // Format header
+      const headers =
+        dataForExcel.length > 0
+          ? Object.keys(dataForExcel[0]).map(this.formatHeader)
+          : []
+      // Buat array yang berisi header dan data
+      const wsData = [
+        headers,
+        ...dataForExcel.map((item) =>
+          headers.map((header) => {
+            // Cari key asli sebelum format untuk mendapatkan nilai
+            const originalKey = Object.keys(item).find(
+              (key) => this.formatHeader(key) === header
+            )
+            return item[originalKey]
+          })
+        ),
+      ]
+      const ws = XLSX.utils.aoa_to_sheet(wsData)
       XLSX.utils.book_append_sheet(wb, ws, 'Laporan')
 
-      // Format nama file berdasarkan jenis pegawai dan periode
+      // Tentukan nama file
       const jenisPegawai = this.pegawaiTerpilih
         .toLowerCase()
         .replace(/\s+/g, '-')
       const [bulan, tahun] = this.periodeTerpilih.split(' ')
-      const fileName = `laporan_potongan_${jenisPegawai}_${bulan.toLowerCase()}_${tahun}.xlsx`
+      const fileName = `laporan-potongan_${jenisPegawai}_${bulan.toLowerCase()}_${tahun}.xlsx`
 
       // Tulis workbook ke file XLSX
       XLSX.writeFile(wb, fileName)
@@ -436,23 +440,16 @@ export default {
     },
 
     getFilteredDataForExcel() {
-      // Filter data berdasarkan periode
-      const filteredData = this.laporanPotongan
-        .filter((item) => {
-          return (
-            item.periode.month === this.periodeTerpilih.split(' ')[0] &&
-            item.periode.year === this.periodeTerpilih.split(' ')[1]
-          )
-        })
-        .flatMap((item) => item.laporanpotongan)
-
-      // Mengembalikan data dengan struktur untuk laporan potongan
-      return filteredData.map((item) => ({
-        no_pegawai: item.no_pegawai,
-        nama: item.nama,
-        sp_fh: item.potongan.sp_fh,
-        infaq: item.potongan.infaq,
-      }))
+      // Pastikan untuk menyesuaikan dengan struktur data yang Anda miliki
+      return this.filteredLaporanPotongan.map((item) => {
+        // Menggabungkan properti pada objek item dengan properti pada objek item.potongan
+        const newItem = {
+          ...item,
+          ...item.potongan,
+        }
+        delete newItem.potongan // Menghapus properti potongan yang tidak diinginkan
+        return newItem
+      })
     },
   },
 }

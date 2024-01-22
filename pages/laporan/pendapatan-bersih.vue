@@ -96,7 +96,7 @@
             <table
               class="min-w-full text-sm text-left text-gray-500 dark:text-gray-400"
             >
-              <thead>
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" class="px-6 py-3">No Pegawai</th>
                   <th scope="col" class="px-6 py-3">Nama Lengkap</th>
@@ -124,14 +124,15 @@
                 <tr
                   v-for="(laporan, index) in paginatedData"
                   :key="`${laporan.no_pegawai}-${index}`"
+                  class="border-b"
                 >
                   <td class="px-8 py-4">{{ laporan.no_pegawai }}</td>
-                  <td>{{ laporan.nama }}</td>
-                  <td>{{ laporan.golongan }}</td>
-                  <td v-if="pegawaiTerpilih !== 'Dosen Luar Biasa'">
+                  <td class="px-8 py-4">{{ laporan.nama }}</td>
+                  <td class="px-8 py-4">{{ laporan.golongan }}</td>
+                  <td class="px-8 py-4" v-if="pegawaiTerpilih !== 'Dosen Luar Biasa'">
                     {{ laporan.jumlah_gaji_fh }}
                   </td>
-                  <td v-if="pegawaiTerpilih !== 'Dosen Luar Biasa'">
+                  <td class="px-8 py-4" v-if="pegawaiTerpilih !== 'Dosen Luar Biasa'">
                     {{ laporan.jumlah_gaji_pusat }}
                   </td>
                   <td>{{ laporan.jumlah_pendapatan }}</td>
