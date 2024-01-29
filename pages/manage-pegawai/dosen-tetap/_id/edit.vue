@@ -252,6 +252,7 @@ export default {
         this.norek_bank_tambahan = response.data.banks[1].no_rekening
         this.nomor_hp = response.data.nomor_hp
         console.log(this.selectedBankUtama)
+        console.log(this.selectedBankTambahan)
       } catch (error) {
         console.log(error)
       }

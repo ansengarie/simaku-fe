@@ -157,19 +157,37 @@
                 <div class="flex">
                   <p class="mr-[16px] text-muted">Halaman</p>
                   <p class="mr-[20px] text-paging">{{ currentPage }}</p>
-                  <button @click="prevPage">
-                    <img
-                      src="~/assets/img/ic_nav-left.png"
-                      alt="Left Arrow"
-                      class="w-[24px] col-span-1 ml-[6px]"
-                    />
+                  <button @click="prevPage" :disabled="currentPage === 1">
+                    <span
+                      :class="{
+                        'material-symbols-outlined': true,
+                        'text-gray-500': currentPage === 1,
+                        'text-black': currentPage !== 1,
+                        'opacity-50': currentPage === 1,
+                      }"
+                    >
+                      arrow_back
+                    </span>
                   </button>
-                  <button @click="nextPage">
-                    <img
-                      src="~/assets/img/ic_nav-right.png"
-                      alt="Right Arrow"
-                      class="w-[24px] col-span-1 mr-[6px]"
-                    />
+                  <button
+                    @click="nextPage"
+                    :disabled="
+                      currentPage * itemsPerPage >= dosenTetapData.length
+                    "
+                  >
+                    <span
+                      :class="{
+                        'material-symbols-outlined': true,
+                        'text-gray-500':
+                          currentPage * itemsPerPage >= dosenTetapData.length,
+                        'opacity-50':
+                          currentPage * itemsPerPage >= dosenTetapData.length,
+                        'text-black':
+                          currentPage * itemsPerPage < dosenTetapData.length,
+                      }"
+                    >
+                      arrow_forward
+                    </span>
                   </button>
                 </div>
               </div>

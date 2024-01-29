@@ -1,5 +1,31 @@
 <template>
   <section>
+    <!-- Spinner Loading -->
+    <div v-if="isLoading" class="fixed inset-0 z-40 bg-black opacity-30"></div>
+    <div
+      v-if="isLoading"
+      class="fixed inset-0 z-50 flex items-center justify-center"
+    >
+      <div role="status">
+        <svg
+          aria-hidden="true"
+          class="w-16 h-16 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+          viewBox="0 0 100 101"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+            fill="currentColor"
+          />
+          <path
+            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+            fill="currentFill"
+          />
+        </svg>
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
     <div class="flex justify-between mt-[50px]">
       <div class="flex justify-start justify-self-start">
         <img src="~/assets/img/logo-simaku-index.png" class="mx-[50px]" />
@@ -18,6 +44,12 @@
           <div class="w-full text-2xl font-semibold text-center text-navy text">
             Transaksi Gaji Dosen Tetap
           </div>
+          <flashMessage
+            :type="flashType"
+            :message="flashMsg"
+            :autoClose="5000"
+            @clearMessage="clearFlashMessage"
+          ></flashMessage>
 
           <div class="w-full py-6 bg-white shadow-xl rounded-xl">
             <div class="space-y-6">
@@ -232,7 +264,7 @@
                       >
                       <input
                         type="text"
-                        class="font-medium input-field"
+                        class="font-medium input-field bg-grey"
                         id="totalGaji"
                         :value="formattedTotalGajiUniversitas"
                         disabled
@@ -320,10 +352,32 @@
                         required
                       />
                     </div>
+                    <div
+                      class="form-group"
+                      v-for="(nilai, nama) in gaji_fakultas.komponen_baru"
+                      :key="nama"
+                    >
+                      <label class="text-navy">{{ nama }}</label>
+                      <div class="flex flex-row">
+                        <input
+                          type="number"
+                          class="input-field basis-[95%]"
+                          v-model="gaji_fakultas.komponen_baru[nama]"
+                        />
+                        <button
+                          class="ml-2 text-red-500 hover:text-red-700"
+                          @click.prevent="hapusKomponen('gaji_fakultas', nama)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                      <!-- Tombol Hapus -->
+                    </div>
+                    <!-- tombol kostumisasi -->
                     <div class="justify-center mt-5 space-y-auto form-group">
-                      <!-- buatkan tombol tambahkan komponen yang bisa dikustomisasi -->
                       <button
                         class="p-2 text-white bg-green-600 border rounded-full"
+                        @click.prevent="openModal('gaji_fakultas')"
                       >
                         Tambahkan Komponen Lainnya
                       </button>
@@ -369,7 +423,37 @@
                         required
                       />
                     </div>
-
+                    <div
+                      class="form-group"
+                      v-for="(nilai, nama) in potongan.komponen_baru"
+                      :key="nama"
+                    >
+                      <label class="text-navy">{{ nama }}</label>
+                      <div class="flex flex-row">
+                        <input
+                          type="number"
+                          class="input-field basis-[95%]"
+                          v-model="potongan.komponen_baru[nama]"
+                        />
+                        <button
+                          class="ml-2 text-red-500 hover:text-red-700"
+                          @click.prevent.prevent="
+                            hapusKomponen('potongan', nama)
+                          "
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                      <!-- Tombol Hapus -->
+                    </div>
+                    <div class="justify-center mt-5 space-y-auto form-group">
+                      <button
+                        class="p-2 text-white bg-green-600 border rounded-full"
+                        @click.prevent="openModal('potongan')"
+                      >
+                        Tambahkan Komponen Lainnya
+                      </button>
+                    </div>
                     <div class="mb-4 form-group">
                       <label for="" class="font-bold text-navy"
                         >Total Potongan</label
@@ -538,7 +622,7 @@
                           type="text"
                           class="font-medium bg-grey input-field"
                           disabled
-                          :value="pendapatanBersih"
+                          :value="formattedPendapatanBersih"
                         />
                       </div>
                     </div>
@@ -558,18 +642,52 @@
         </div>
       </div>
     </div>
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click.prevent="showModal = false">&times;</span>
+        <p class="mb-2 text-lg font-semibold text-center text-navy">
+          Tambah Komponen Baru
+        </p>
+        <div class="flex justify-center">
+          <form @submit.prevent="tambahKomponenBaru" class="mt-4">
+            <label for="komponenNama" class="mr-1">Nama Komponen:</label>
+            <input
+              type="text"
+              id="komponenNama"
+              v-model="komponenBaru.nama"
+              class="mr-2 input-field"
+            />
+            <label for="komponenNilai" class="ml-4 mr-1">Nilai:</label>
+            <input
+              type="number"
+              id="komponenNilai"
+              v-model.number="komponenBaru.nilai"
+              class="input-field"
+            />
+            <div class="flex justify-center mt-4">
+              <button type="submit" class="btn btn-primary">Tambah</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
 export default {
-  components: {},
+  components: {
+    flashMessage: () => import('~/components/FlashMessage.vue'),
+  },
   data() {
     return {
       dosenData: {
         banks: [],
       },
+      isLoading: false,
       selectedBank: null,
+      flashType: '', // 'success' atau 'error'
+      flashMsg: '',
       gaji_pokok: 0,
       tunjangan_fungsional: 0,
       tunjangan_struktural: 0,
@@ -591,10 +709,12 @@ export default {
         peny_honor_mengajar: 0,
         tunjangan_guru_besar: 0,
         honor: 0,
+        komponen_baru: {},
       },
       potongan: {
         sp_fh: 0,
         infaq: 0,
+        komponen_baru: {},
       },
       pensiun: 0,
       bruto_pajak: 0,
@@ -612,6 +732,12 @@ export default {
       pendapatan_bersih: 0,
       dosen_tetap_id: '',
       dostap_bank_id: '',
+      showModal: false,
+      komponenBaru: {
+        nama: '',
+        nilai: 0,
+        modalContext: '',
+      },
     }
   },
   async asyncData({ params, $axios }) {
@@ -654,6 +780,7 @@ export default {
           uang_lembur_hl: this.uang_lembur_hl,
           transport_kehadiran: this.transport_kehadiran,
           honor_universitas: this.honor_universitas,
+          // gaji_fakultas: this.gaji_fakultas,
           gaji_fakultas: {
             tunjangan_tambahan: this.gaji_fakultas.tunjangan_tambahan,
             honor_kinerja: this.gaji_fakultas.honor_kinerja,
@@ -663,10 +790,13 @@ export default {
             peny_honor_mengajar: this.gaji_fakultas.peny_honor_mengajar,
             tunjangan_guru_besar: this.gaji_fakultas.tunjangan_guru_besar,
             honor: this.gaji_fakultas.honor,
+            // Array untuk menyimpan komponen baru
+            ...this.gaji_fakultas.komponen_baru,
           },
           potongan: {
             sp_fh: this.potongan.sp_fh,
             infaq: this.potongan.infaq,
+            ...this.potongan.komponen_baru,
           },
           pensiun: this.pensiun,
           bruto_pajak: this.brutoPajak,
@@ -701,7 +831,7 @@ export default {
           }
         )
         this.flashType = 'success'
-        this.flashMsg = 'Data dosen berhasil ditambahkan!'
+        this.flashMsg = 'Data transaksi gaji dosen berhasil ditambahkan!'
         // Menampilkan indikator loading
         this.isLoading = true
 
@@ -711,14 +841,70 @@ export default {
           this.isLoading = false
 
           // Mengalihkan ke halaman yang diinginkan
-          this.$router.push('/manage-pegawai/dosen-tetap')
+          this.$router.push('/gaji/dosen-tetap')
         }, 2000)
       } catch (error) {
         console.error('Error tambah Dosen Tetap:', error)
-        console.error('Error tambah Dosen Tetap:', error.response)
-        this.flashType = 'error'
-        this.flashMsg = 'Terjadi kesalahan saat menambahkan data dosen.'
+        if (error.response) {
+          // Server responded with a status other than 200 range
+          console.error('Response data:', error.response.data)
+          console.error('Response status:', error.response.status)
+          console.error('Response headers:', error.response.headers)
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error('Error request:', error.request)
+        } else {
+          // Something happened in setting up the request
+          console.error('Error:', error.message)
+          this.flashType = 'error'
+          this.flashMsg =
+            'Terjadi kesalahan saat menambahkan data transaksi gaji dosen.'
+        }
       }
+    },
+    clearFlashMessage() {
+      this.flashType = ''
+      this.flashMsg = ''
+    },
+    tambahKomponenBaru() {
+      if (!this.komponenBaru.nama || this.komponenBaru.nilai === null) {
+        alert('Harap isi semua field!')
+        return
+      }
+
+      // Gunakan Vue.set untuk menambahkan properti baru secara reaktif
+      if (this.modalContext === 'gaji_fakultas') {
+        this.$set(
+          this.gaji_fakultas.komponen_baru,
+          this.komponenBaru.nama,
+          this.komponenBaru.nilai
+        )
+      } else if (this.modalContext === 'potongan') {
+        this.$set(
+          this.potongan.komponen_baru,
+          this.komponenBaru.nama,
+          this.komponenBaru.nilai
+        )
+      }
+
+      // Reset komponenBaru untuk input selanjutnya
+      this.komponenBaru = { nama: '', nilai: 0 }
+
+      // Tutup modal
+      this.showModal = false
+    },
+    hapusKomponen(context, namaKomponen) {
+      if (context === 'gaji_fakultas') {
+        // Hapus komponen dari gaji_fakultas
+        this.$delete(this.gaji_fakultas.komponen_baru, namaKomponen)
+      } else if (context === 'potongan') {
+        // Hapus komponen dari potongan
+        this.$delete(this.potongan, namaKomponen)
+      }
+    },
+    openModal(context) {
+      this.modalContext = context // Set the modal context
+      this.showModal = true // Show the modal
     },
     getCurrentMonthYear() {
       const currentDate = new Date()
@@ -790,6 +976,13 @@ export default {
         currency: 'IDR',
       }).format(nominal)
     },
+    // tambahKomponenGajiFakultas() {
+    //   // Tambahkan logika untuk menambahkan komponen ke state lokal
+    //   // Contoh:
+    //   this.gaji_fakultas[this.komponenBaru.nama] = this.komponenBaru.nilai
+    //   this.showModal = false
+    //   this.komponenBaru = { nama: '', nilai: 0 }
+    // },
   },
   computed: {
     totalGajiUniversitas() {
@@ -812,21 +1005,45 @@ export default {
       return this.formatRupiah(this.totalGajiUniversitas)
     },
     totalGajiFakultas() {
-      return (
-        this.gaji_fakultas.tunjangan_tambahan +
-        this.gaji_fakultas.honor_kinerja +
-        this.gaji_fakultas.honor_kelebihan_mengajar +
-        this.gaji_fakultas.honor_mengajar_dpk +
-        this.gaji_fakultas.peny_honor_mengajar +
-        this.gaji_fakultas.tunjangan_guru_besar +
-        this.gaji_fakultas.honor
-      )
+      let total = 0
+
+      // Jumlahkan nilai komponen yang sudah diketahui
+      total += this.gaji_fakultas.tunjangan_tambahan
+      total += this.gaji_fakultas.honor_kinerja
+      total += this.gaji_fakultas.honor_kelebihan_mengajar
+      total += this.gaji_fakultas.honor_mengajar_dpk
+      total += this.gaji_fakultas.peny_honor_mengajar
+      total += this.gaji_fakultas.tunjangan_guru_besar
+      total += this.gaji_fakultas.honor
+
+      // Jumlahkan nilai dari komponen baru, jika ada
+      if (this.gaji_fakultas.komponen_baru) {
+        for (let key in this.gaji_fakultas.komponen_baru) {
+          if (this.gaji_fakultas.komponen_baru.hasOwnProperty(key)) {
+            total += parseFloat(this.gaji_fakultas.komponen_baru[key]) || 0
+          }
+        }
+      }
+
+      return total
     },
     formattedTotalGajiFakultas() {
       return this.formatRupiah(this.totalGajiFakultas)
     },
     totalPotongan() {
-      return this.potongan.sp_fh + this.potongan.infaq
+      let total = 0
+
+      total += this.potongan.sp_fh
+      total += this.potongan.infaq
+
+      if (this.potongan.komponen_baru) {
+        for (let key in this.potongan.komponen_baru) {
+          if (this.potongan.komponen_baru.hasOwnProperty(key)) {
+            total += parseFloat(this.potongan.komponen_baru[key]) || 0
+          }
+        }
+      }
+      return total
     },
     formattedTotalPotongan() {
       return this.formatRupiah(this.totalPotongan)
@@ -858,6 +1075,9 @@ export default {
         (this.dplk_pensiun + this.aksa_mandiri + this.pensiun + this.pajakPph21)
       )
     },
+    formattedPendapatanBersih() {
+      return this.formatRupiah(this.pendapatanBersih)
+    },
     potonganTakKenaPajak() {
       return this.totalPotongan
     },
@@ -868,4 +1088,39 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  border-radius: 16px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>

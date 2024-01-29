@@ -31,7 +31,7 @@
         <img src="~/assets/img/logo-simaku-index.png" class="mx-[50px]" />
       </div>
       <div class="flex justify-end justify-self-end">
-        <nuxt-link to="/manage-pegawai/karyawan">
+        <nuxt-link to="/manage-pegawai/dosen-lb">
           <img src="~/assets/img/btn_close.png" class="mx-[50px]" />
         </nuxt-link>
       </div>
@@ -45,10 +45,10 @@
     ></flashMessage>
 
     <div class="items-center justify-center mt-[19px]">
-      <p class="text-center text-title">Edit Karyawan</p>
+      <p class="text-center text-title">Edit Dosen Luar Biasa</p>
     </div>
     <div class="flex justify-center justify-self-center mt-[5px]">
-      <form class="w-full card" @submit.prevent="editDosenTetap">
+      <form class="w-full card" @submit.prevent="editDosenLuarBiasa">
         <div class="form-group">
           <label for="" class="text-grey">Nomor Pegawai</label>
           <input type="text" class="input-field" v-model="no_pegawai" />
@@ -56,6 +56,10 @@
         <div class="form-group">
           <label for="" class="text-grey">Nama Lengkap</label>
           <input type="text" class="input-field" v-model="nama" />
+        </div>
+        <div class="form-group">
+          <label for="" class="text-grey">NPWP</label>
+          <input type="text" class="input-field" v-model="npwp" required />
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Golongan</label>
@@ -92,20 +96,71 @@
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Alamat Saat Ini</label>
-          <input type="text" class="input-field" v-model="alamat_saatini" />
+          <input type="text" class="input-field" v-model="alamat_saat_ini" />
         </div>
         <div class="form-group">
-          <label for="" class="text-grey">Nama Bank</label>
-          <select class="input-field" v-model="nama_bank">
-            <option value="BNI">BNI</option>
-            <option value="BCA">BCA</option>
-            <option value="BRI">BRI</option>
-            <option value="Mandiri">Mandiri</option>
+          <label for="" class="text-grey">Nama Bank Utama</label>
+          <select class="input-field" v-model="selectedBankUtama">
+            <option value="Bank BCA">Bank BCA</option>
+            <option value="Bank Mandiri">Bank Mandiri</option>
+            <option value="Bank BRI">Bank BRI</option>
+            <option value="Bank BNI">Bank BNI</option>
+            <option value="Bank CIMB Niaga">Bank CIMB Niaga</option>
+            <option value="Bank Danamon">Bank Danamon</option>
+            <option value="Bank Panin">Bank Panin</option>
+            <option value="Bank Maybank">Bank Maybank</option>
+            <option value="Bank OCBC NISP">Bank OCBC NISP</option>
+            <option value="Bank Permata">Bank Permata</option>
+            <option value="Bank Syariah Indonesia">
+              Bank Syariah Indonesia
+            </option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="" class="text-grey">Nomor Rekening</label>
-          <input type="text" class="input-field" v-model="norek_bank" />
+        <div v-if="banks && banks.length">
+          <div class="form-group">
+            <label for="" class="text-grey">Nomor Rekening Utama</label>
+            <input
+              type="text"
+              class="input-field"
+              v-model="norek_bank_utama"
+              :disabled="!selectedBankUtama"
+              :style="{
+                'background-color': selectedBankUtama ? '' : '#D9D9D9',
+              }"
+            />
+          </div>
+          <div class="form-group">
+            <label for="" class="text-grey">Nama Bank Tambahan</label>
+            <select class="input-field" v-model="selectedBankTambahan">
+              <option value="Bank BCA">Bank BCA</option>
+              <option value="Bank Mandiri">Bank Mandiri</option>
+              <option value="Bank BRI">Bank BRI</option>
+              <option value="Bank BNI">Bank BNI</option>
+              <option value="Bank CIMB Niaga">Bank CIMB Niaga</option>
+              <option value="Bank Danamon">Bank Danamon</option>
+              <option value="Bank Panin">Bank Panin</option>
+              <option value="Bank Maybank">Bank Maybank</option>
+              <option value="Bank OCBC NISP">Bank OCBC NISP</option>
+              <option value="Bank Permata">Bank Permata</option>
+              <option value="Bank Syariah Indonesia">
+                Bank Syariah Indonesia
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="" class="text-grey"
+              >Nomor Rekening Tambahan (Optional)</label
+            >
+            <input
+              type="text"
+              class="input-field"
+              v-model="norek_bank_tambahan"
+              :disabled="!selectedBankTambahan"
+              :style="{
+                'background-color': selectedBankTambahan ? '' : '#D9D9D9',
+              }"
+            />
+          </div>
         </div>
         <div class="form-group">
           <label for="" class="text-grey">Nomor Handphone</label>
@@ -113,7 +168,7 @@
         </div>
         <div class="flex justify-between mt-[43px] mb-[40px] w-[570]">
           <nuxt-link
-            to="/manage-pegawai/karyawan"
+            to="/manage-pegawai/dosen-lb"
             class="btn btn-primary w-[260px] h-[46px] mr-[51px] bg-red-700"
           >
             Batal
@@ -128,6 +183,7 @@
 </template>
 
 <script>
+import banksData from '~/static/banks.js'
 export default {
   name: 'EditPage',
   components: {
@@ -138,16 +194,21 @@ export default {
       no_pegawai: '',
       nama: '',
       golongan: '',
+      npwp: '',
       status: '',
       jabatan: '',
       alamat_KTP: '',
-      alamat_saatini: '',
-      nama_bank: '',
-      norek_bank: '',
+      alamat_saat_ini: '',
+      selectedBankUtama: '',
+      norek_bank_utama: '',
+      selectedBankTambahan: '',
+      norek_bank_tambahan: '',
       nomor_hp: '',
       flashType: '', // 'success' atau 'error'
       flashMsg: '',
       isLoading: false,
+      idBankUtama: '',
+      idBankTambahan: '',
     }
   },
   mounted() {
@@ -157,45 +218,71 @@ export default {
     // Method untuk mengambil data dosen tetap dari API
     async getDosenTetap() {
       try {
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+          console.error('Token tidak ditemukan!')
+          // Handle kasus ketika token tidak ditemukan, misalnya, redirect ke halaman login.
+          return
+        }
+        console.log(localStorage.getItem('token'), 'ini token')
         const response = await this.$axios.$get(
-          `/karyawan?id=${this.$route.params.id}`,
+          `/dosenlb?id=${this.$route.params.id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           }
         )
+        console.log(response, 'response')
         console.log(this.$route.params.id, 'id')
-        this.no_pegawai = response.data.no_pegawai
-        this.nama = response.data.nama
-        this.golongan = response.data.golongan
-        this.status = response.data.status
-        this.jabatan = response.data.jabatan
-        this.alamat_KTP = response.data.alamat_KTP
-        this.alamat_saatini = response.data.alamat_saatini
-        this.nama_bank = response.data.nama_bank
-        this.norek_bank = response.data.norek_bank
-        this.nomor_hp = response.data.nomor_hp
+        this.no_pegawai = response.data[0].no_pegawai
+        this.nama = response.data[0].nama
+        this.npwp = response.data[0].npwp
+        this.golongan = response.data[0].golongan
+        this.status = response.data[0].status
+        this.jabatan = response.data[0].jabatan
+        this.alamat_KTP = response.data[0].alamat_KTP
+        this.alamat_saat_ini = response.data[0].alamat_saat_ini
+        this.idBankUtama = response.data[0].banks[0].id
+        this.selectedBankUtama = response.data[0].banks[0].nama_bank
+        this.norek_bank_utama = response.data[0].banks[0].no_rekening
+        this.idBankTambahan = response.data[0].banks[1].id
+        this.selectedBankTambahan = response.data[0].banks[1].nama_bank
+        this.norek_bank_tambahan = response.data[0].banks[1].no_rekening
+        this.nomor_hp = response.data[0].nomor_hp
+        console.log(this.selectedBankUtama)
       } catch (error) {
         console.log(error)
       }
     },
     // Method untuk mengedit data dosen tetap
-    async editDosenTetap() {
+    async editDosenLuarBiasa() {
       try {
         const response = await this.$axios.put(
-          `/karyawan/update/${this.$route.params.id}`,
+          `/dosenlb/update/${this.$route.params.id}`,
           {
-            no_pegawai: this.no_pegawai,
             nama: this.nama,
-            golongan: this.golongan,
+            no_pegawai: this.no_pegawai,
+            npwp: this.npwp,
             status: this.status,
+            golongan: this.golongan,
             jabatan: this.jabatan,
             alamat_KTP: this.alamat_KTP,
-            alamat_saatini: this.alamat_saatini,
-            nama_bank: this.nama_bank,
-            norek_bank: this.norek_bank,
+            alamat_saat_ini: this.alamat_saat_ini,
             nomor_hp: this.nomor_hp,
+            banks: [
+              {
+                id: this.idBankUtama,
+                nama_bank: this.selectedBankUtama,
+                no_rekening: this.norek_bank_utama,
+              },
+              {
+                id: this.idBankTambahan,
+                nama_bank: this.selectedBankTambahan,
+                no_rekening: this.norek_bank_tambahan,
+              },
+            ],
           },
           {
             headers: {
@@ -203,8 +290,9 @@ export default {
             },
           }
         )
+        console.log(localStorage.getItem('token'), 'ini token put')
         this.flashType = 'success'
-        this.flashMsg = 'Data karyawan berhasil diubah!'
+        this.flashMsg = 'Data dosen berhasil diubah!'
         // Menampilkan indikator loading
         this.isLoading = true
 
@@ -212,17 +300,22 @@ export default {
         setTimeout(() => {
           // Menghilangkan indikator loading
           this.isLoading = false
-          this.$router.push('/manage-pegawai/karyawan')
+          this.$router.push('/manage-pegawai/dosen-lb')
         }, 2000)
       } catch (error) {
-        console.error('Error edit Karyawan Tetap:', error)
+        console.error('Error edit Dosen Luar Biasa:', error)
         this.flashType = 'error'
-        this.flashMsg = 'Terjadi kesalahan saat mengubah data karyawan.'
+        this.flashMsg = 'Terjadi kesalahan saat mengubah data dosen.'
       }
     },
     clearFlashMessage() {
       this.flashType = ''
       this.flashMsg = ''
+    },
+  },
+  computed: {
+    banks() {
+      return banksData
     },
   },
 }

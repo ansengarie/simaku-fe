@@ -189,7 +189,7 @@
                           <div class="flex justify-center">
                             <nuxt-link
                               :to="{
-                                name: 'manage-pegawai-dosen-lb-edit',
+                                name: 'manage-pegawai-dosen-lb-id-edit',
                                 params: { id: dosen.id },
                               }"
                             >
@@ -244,19 +244,37 @@
                 <div class="flex">
                   <p class="mr-[16px] text-muted">Halaman</p>
                   <p class="mr-[20px] text-paging">{{ currentPage }}</p>
-                  <button @click="prevPage">
-                    <img
-                      src="~/assets/img/ic_nav-left.png"
-                      alt="Left Arrow"
-                      class="w-[24px] col-span-1 ml-[6px]"
-                    />
+                  <button @click="prevPage" :disabled="currentPage === 1">
+                    <span
+                      :class="{
+                        'material-symbols-outlined': true,
+                        'text-gray-500': currentPage === 1,
+                        'text-black': currentPage !== 1,
+                        'opacity-50': currentPage === 1,
+                      }"
+                    >
+                      arrow_back
+                    </span>
                   </button>
-                  <button @click="nextPage">
-                    <img
-                      src="~/assets/img/ic_nav-right.png"
-                      alt="Right Arrow"
-                      class="w-[24px] col-span-1 mr-[6px]"
-                    />
+                  <button
+                    @click="nextPage"
+                    :disabled="
+                      currentPage * itemsPerPage >= dosenTetapData.length
+                    "
+                  >
+                    <span
+                      :class="{
+                        'material-symbols-outlined': true,
+                        'text-gray-500':
+                          currentPage * itemsPerPage >= dosenTetapData.length,
+                        'opacity-50':
+                          currentPage * itemsPerPage >= dosenTetapData.length,
+                        'text-black':
+                          currentPage * itemsPerPage < dosenTetapData.length,
+                      }"
+                    >
+                      arrow_forward
+                    </span>
                   </button>
                 </div>
               </div>
@@ -278,9 +296,9 @@ export default {
   data() {
     return {
       totalAktifDosenTetap: 0, // Inisialisasi data sebagai null
-      totalDosenTetapAktif: [], // Inisialisasi data sebagai null
-      totalDosenTetapNonAktif: [], // Inisialisasi data sebagai null
-      dosenTetapData: [], // Inisialisasi array untuk menyimpan data Dosen Tetap
+      totalDosenTetapAktif: 0, // Inisialisasi data sebagai null
+      totalDosenTetapNonAktif: 0, // Inisialisasi data sebagai null
+      dosenTetapData: 0, // Inisialisasi array untuk menyimpan data Dosen Tetap
       isModalOpen: false, // Inisialisasi status modal sebagai false
       currentId: null, // Inisialisasi ID Dosen Tetap yang akan dihapus
       currentName: '', // Inisialisasi nama Dosen Tetap yang akan dihapus
