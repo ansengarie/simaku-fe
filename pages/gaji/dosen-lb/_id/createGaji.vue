@@ -115,37 +115,9 @@
                       </tr>
 
                       <tr>
-                        <td class="text-grey">Status Bank</td>
-                        <td>:</td>
-                        <td class="">
-                          <select
-                            name="statusBank"
-                            id="statusBank"
-                            class="p-1 border input-field"
-                            v-model="statusBank"
-                          >
-                            <option value="Payroll">Payroll</option>
-                            <option value="Non Payroll">Non Payroll</option>
-                          </select>
-                        </td>
-                      </tr>
-
-                      <tr>
                         <td class="text-grey">Periode</td>
                         <td>:</td>
-                        <td class="">
-                          <date-range-picker
-                            v-model="selectedDateRange"
-                            :disabledDates="disabledDates"
-                            class="mt-2 border border-navy"
-                          />
-                          <div v-if="responseData">
-                            <p>
-                              Start Date: {{ responseData.gaji_date_start }}
-                            </p>
-                            <p>End Date: {{ responseData.gaji_date_end }}</p>
-                          </div>
-                        </td>
+                        <td class="">{{ getCurrentMonthYear() }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -153,236 +125,38 @@
               </div>
               <div class="space-y-3">
                 <form action="" @submit.prevent="tambahTransaksiGaji">
-                  <div
-                    class="w-full py-2 text-xl font-semibold text-center text-white bg-navy"
-                  >
-                    Gaji Universitas
-                  </div>
-
-                  <!-- Konten Gaji Pusat -->
-
-                  <!-- tampilkan data dari API secara dinamis -->
-                  <div
-                    class="grid grid-cols-1 px-6 md:mx-[74px] gap-x-12 gap-y-2 md:grid-cols-2"
-                  >
-                    <!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
-                    <div class="form-group">
-                      <label for="" class="text-navy">Gaji Pokok</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_pokok"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Tunjangan Fungsional</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="tunjangan_fungsional"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Tunjangan Struktural</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="tunjangan_struktural"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Tunjangan Khusus Istimewa</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="tunjangan_khusus_istimewa"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Tunjangan Presensi Kerja</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="tunjangan_presensi_kerja"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Tunjangan Tambahan</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="tunjangan_tambahan"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Uang Lembur HK</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="uang_lembur_hk"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Honor</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="honor_universitas"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Uang Lembur HL</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="uang_lembur_hl"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Tunjangan Suami Istri</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="tunjangan_suami_istri"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Transport Kehadiran</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="transport_kehadiran"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Tunjangan Anak</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="tunjangan_anak"
-                        required
-                      />
-                    </div>
-                    <div class="mb-4 form-group">
-                      <label for="" class="font-bold text-navy"
-                        >Total Gaji Universitas</label
-                      >
-                      <input
-                        type="text"
-                        class="font-medium input-field bg-grey"
-                        id="totalGaji"
-                        :value="formattedTotalGajiUniversitas"
-                        disabled
-                      />
-                    </div>
-                  </div>
-
                   <!-- Section Gaji Fakultas Hukum-->
                   <div
                     class="w-full py-2 text-xl font-semibold text-center text-white bg-navy"
                   >
-                    Gaji Fakultas Hukum
+                    Komponen Pendapatan
                   </div>
 
                   <!-- Konten Gaji Fakultas Hukum -->
                   <div
                     class="grid grid-cols-1 px-6 md:mx-[74px] gap-x-12 gap-y-2 md:grid-cols-2"
                   >
-                    <div class="form-group">
-                      <label for="" class="text-navy">Tunjangan Tambahan</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.tunjangan_tambahan"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Honor Kinerja</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.honor_kinerja"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Honor Kelebihan Mengajar</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.honor_kelebihan_mengajar"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Honor Mengajar DPK</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.honor_mengajar_dpk"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Penyesuaian Honor Mengajar</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.peny_honor_mengajar"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Tunjangan Guru Besar</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.tunjangan_guru_besar"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Honor</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.honor"
-                        required
-                      />
-                    </div>
+                    <!-- Konten Komponen Pendapatan -->
                     <div
                       class="form-group"
-                      v-for="(nilai, nama) in gaji_fakultas.komponen_baru"
+                      v-for="(value, key) in filteredKomponenPendapatan"
+                      :key="key"
+                    >
+                      <label :for="`komponen-${key}`" class="text-navy">{{
+                        formatLabel(key)
+                      }}</label>
+                      <input
+                        type="text"
+                        :id="`komponen-${key}`"
+                        class="input-field"
+                        v-model.number="komponen_pendapatan[key]"
+                        required
+                      />
+                    </div>
+
+                    <div
+                      class="form-group"
+                      v-for="(nilai, nama) in komponen_pendapatan.komponen_baru"
                       :key="nama"
                     >
                       <label class="text-navy">{{ nama }}</label>
@@ -390,11 +164,15 @@
                         <input
                           type="number"
                           class="input-field basis-[95%]"
-                          v-model="gaji_fakultas.komponen_baru[nama]"
+                          v-model.number="
+                            komponen_pendapatan.komponen_baru[nama]
+                          "
                         />
                         <button
                           class="ml-2 text-red-500 hover:text-red-700"
-                          @click.prevent="hapusKomponen('gaji_fakultas', nama)"
+                          @click.prevent="
+                            hapusKomponen('komponen_pendapatan', nama)
+                          "
                         >
                           <i class="fas fa-trash"></i>
                         </button>
@@ -405,14 +183,14 @@
                     <div class="justify-center mt-5 space-y-auto form-group">
                       <button
                         class="p-2 text-white bg-green-600 border rounded-full"
-                        @click.prevent="openModal('gaji_fakultas')"
+                        @click.prevent="openModal('komponen_pendapatan')"
                       >
                         Tambahkan Komponen Lainnya
                       </button>
                     </div>
                     <div class="mb-4 form-group">
                       <label for="" class="font-bold text-navy"
-                        >Total Gaji Fakultas Hukum</label
+                        >Total Komponen Pendapatan</label
                       >
                       <input
                         type="text"
@@ -505,142 +283,17 @@
                   <div
                     class="grid grid-cols-1 px-6 md:mx-[74px] gap-x-12 gap-y-2 md:grid-cols-2"
                   >
+                    <!-- Pajak PPh25 -->
                     <div class="form-group">
-                      <label for="" class="text-navy">Pensiun</label>
+                      <label class="text-navy">PPH 25</label>
                       <input
                         type="text"
                         class="input-field"
-                        v-model.number="pensiun"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Jumlah Setoran Potongan Kena Pajak</label
-                      >
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="jumlahSetoranPotonganKenaPajak"
-                        required
+                        :value="calculatePph25"
                         disabled
                       />
                     </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Bruto Untuk Pajak</label>
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="brutoPajak"
-                        required
-                        disabled
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">PTKP</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="ptkp"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Bruto Murni</label>
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="brutoMurni"
-                        required
-                        disabled
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">PKP</label>
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        v-model.number="pkp"
-                        required
-                        disabled
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Biaya Jabatan</label>
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="biayaJabatan"
-                        required
-                        disabled
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Pajak PPh21</label>
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="pajakPph21"
-                        required
-                        disabled
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Asuransi Aksa Mandiri</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="aksa_mandiri"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Jumlah Setoran Pajak</label
-                      >
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="jumlahSetoranPajak"
-                        required
-                        disabled
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">DPLK Pensiun</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="dplk_pensiun"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Potongan Tak Kena Pajak</label
-                      >
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="potonganTakKenaPajak"
-                        required
-                        disabled
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Jumlah Potongan Kena Pajak</label
-                      >
-                      <input
-                        type="text"
-                        class="bg-gray-200 input-field"
-                        :value="jumlahPotonganKenaPajak"
-                        required
-                        disabled
-                      />
-                    </div>
+
                     <div class="col-span-2 md:w-[48%]">
                       <div class="form-group">
                         <label for="" class="font-bold text-navy"
@@ -650,7 +303,7 @@
                           type="text"
                           class="font-medium bg-grey input-field"
                           disabled
-                          :value="formattedPendapatanBersih"
+                          :value="calculatePendapatanBersih"
                         />
                       </div>
                     </div>
@@ -703,12 +356,9 @@
 </template>
 
 <script>
-import DateRangePicker from 'vue2-daterange-picker'
-import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 export default {
   components: {
     flashMessage: () => import('~/components/FlashMessage.vue'),
-    DateRangePicker,
   },
   data() {
     return {
@@ -742,6 +392,14 @@ export default {
         honor: 0,
         komponen_baru: {},
       },
+      komponen_pendapatan: {
+        tunjangan_tambahan: 0,
+        honor_kinerja: 0,
+        honor_mengajar: 0,
+        tunjangan_guru_besar: 0,
+        komponen_baru: {},
+      },
+      pajak_pph25: 0,
       potongan: {
         sp_fh: 0,
         infaq: 0,
@@ -761,35 +419,23 @@ export default {
       jumlah_set_pajak: 0,
       potongan_tak_kena_pajak: 0,
       pendapatan_bersih: 0,
-      dosen_tetap_id: '',
-      dostap_bank_id: '',
+      dosen_luar_biasa_id: '',
+      doslb_bank_id: '',
       showModal: false,
       komponenBaru: {
         nama: '',
         nilai: 0,
         modalContext: '',
       },
-      statusBank: '',
-      gaji_date_start: '',
-      gaji_date_end: '',
-      selectedDateRange: {
-        startDate: null,
-        endDate: null,
-      },
-      disabledDates: {
-        to: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
-      },
-      responseData: null,
     }
   },
-
   async asyncData({ params, $axios }) {
     try {
       const token = localStorage.getItem('token')
       const headers = token ? { Authorization: `Bearer ${token}` } : {}
 
       // Fetch the data for the specific ID
-      const response = await $axios.get(`/dosentetap/${params.id}`, { headers })
+      const response = await $axios.get(`/dosenlb/${params.id}`, { headers })
 
       // Find the specific dosen data from the array
       const dosenDataArray = response.data.data.data
@@ -810,63 +456,20 @@ export default {
   methods: {
     async tambahTransaksiGaji() {
       try {
-        const startDate = this.selectedDateRange.startDate
-          ? this.selectedDateRange.startDate.toISOString().slice(0, 10)
-          : null
-        const endDate = this.selectedDateRange.endDate
-          ? this.selectedDateRange.endDate.toISOString().slice(0, 10)
-          : null
+        // Menyiapkan data untuk komponen pendapatan, mengesampingkan komponen_baru
+        const komponenPendapatanData = this.konversiKomponenKeInteger(
+          this.komponen_pendapatan
+        )
+        const potonganData = this.konversiKomponenKeInteger(this.potongan)
 
+        // Data yang akan dikirim
         const dataToPost = {
-          gaji_pokok: this.gaji_pokok,
-          tunjangan_fungsional: this.tunjangan_fungsional,
-          tunjangan_struktural: this.tunjangan_struktural,
-          tunjangan_khusus_istimewa: this.tunjangan_khusus_istimewa,
-          tunjangan_presensi_kerja: this.tunjangan_presensi_kerja,
-          tunjangan_tambahan: this.tunjangan_tambahan,
-          tunjangan_suami_istri: this.tunjangan_suami_istri,
-          tunjangan_anak: this.tunjangan_anak,
-          uang_lembur_hk: this.uang_lembur_hk,
-          uang_lembur_hl: this.uang_lembur_hl,
-          transport_kehadiran: this.transport_kehadiran,
-          honor_universitas: this.honor_universitas,
-          // gaji_fakultas: this.gaji_fakultas,
-          gaji_fakultas: {
-            tunjangan_tambahan: this.gaji_fakultas.tunjangan_tambahan,
-            honor_kinerja: this.gaji_fakultas.honor_kinerja,
-            honor_kelebihan_mengajar:
-              this.gaji_fakultas.honor_kelebihan_mengajar,
-            honor_mengajar_dpk: this.gaji_fakultas.honor_mengajar_dpk,
-            peny_honor_mengajar: this.gaji_fakultas.peny_honor_mengajar,
-            tunjangan_guru_besar: this.gaji_fakultas.tunjangan_guru_besar,
-            honor: this.gaji_fakultas.honor,
-            // Array untuk menyimpan komponen baru
-            ...this.gaji_fakultas.komponen_baru,
-          },
-          potongan: {
-            sp_fh: this.potongan.sp_fh,
-            infaq: this.potongan.infaq,
-            ...this.potongan.komponen_baru,
-          },
-          pensiun: this.pensiun,
-          bruto_pajak: this.brutoPajak,
-          bruto_murni: this.brutoMurni,
-          biaya_jabatan: this.biayaJabatan,
-          aksa_mandiri: this.aksa_mandiri,
-          dplk_pensiun: this.dplk_pensiun,
-          jumlah_potongan_kena_pajak: this.jumlahPotonganKenaPajak,
-          jumlah_set_potongan_kena_pajak: this.jumlahSetoranPotonganKenaPajak,
-          ptkp: this.ptkp,
-          pkp: this.pkp,
-          pajak_pph21: this.pajakPph21,
-          jumlah_set_pajak: this.jumlahSetoranPajak,
-          potongan_tak_kena_pajak: this.potonganTakKenaPajak,
-          pendapatan_bersih: this.pendapatanBersih,
-          dosen_tetap_id: this.dosenData.id,
-          dostap_bank_id: this.selectedBank,
-          status_bank: this.statusBank,
-          gaji_date_start: startDate,
-          gaji_date_end: endDate,
+          komponen_pendapatan: komponenPendapatanData,
+          potongan: potonganData,
+          pajak_pph25: this.calculatePph25,
+          pendapatan_bersih: this.calculatePendapatanBersih,
+          dosen_luar_biasa_id: this.dosenData.id,
+          doslb_bank_id: this.selectedBank,
         }
 
         // Menampilkan data yang akan dikirim ke API di console log
@@ -874,7 +477,7 @@ export default {
 
         // console.log(this.hasil)
         const response = await this.$axios.post(
-          'dosentetap/gaji/transaksi/create',
+          'dosenlb/gaji/transaksi/create',
           dataToPost,
           {
             headers: {
@@ -884,7 +487,7 @@ export default {
           }
         )
         this.flashType = 'success'
-        this.flashMsg = 'Data transaksi gaji dosen berhasil ditambahkan!'
+        this.flashMsg = 'Data transaksi gaji dosenlb berhasil ditambahkan!'
         // Menampilkan indikator loading
         this.isLoading = true
 
@@ -894,7 +497,7 @@ export default {
           this.isLoading = false
 
           // Mengalihkan ke halaman yang diinginkan
-          this.$router.push('/gaji/dosen-tetap')
+          this.$router.push('/gaji/dosen-lb')
         }, 2000)
       } catch (error) {
         console.error('Error tambah Dosen Tetap:', error)
@@ -911,9 +514,36 @@ export default {
           console.error('Error:', error.message)
           this.flashType = 'error'
           this.flashMsg =
-            'Terjadi kesalahan saat menambahkan data transaksi gaji dosen.'
+            'Terjadi kesalahan saat menambahkan data transaksi dosenlb dosen.'
         }
       }
+    },
+    konversiKomponenKeInteger(komponen) {
+      const data = { ...komponen }
+      delete data.komponen_baru // Hapus komponen_baru yang merupakan objek
+
+      // Tambahkan kembali nilai dari komponen_baru sebagai integer
+      for (const key in komponen.komponen_baru) {
+        const value = parseInt(komponen.komponen_baru[key], 10)
+        if (!isNaN(value)) {
+          data[key] = value
+        }
+      }
+
+      return data
+    },
+    formatLabel(key) {
+      // Contoh pemetaan dari key ke label yang ramah
+      const labels = {
+        tunjangan_tambahan: 'Tunjangan Tambahan',
+        honor_kinerja: 'Honor Kinerja',
+        honor_mengajar: 'Honor Mengajar',
+        tunjangan_guru_besar: 'Tunjangan Guru Besar',
+        // Tambahkan pemetaan lainnya sesuai kebutuhan
+      }
+
+      // Kembalikan label yang cocok dengan key, atau key itu sendiri jika tidak ditemukan
+      return labels[key] || key
     },
     clearFlashMessage() {
       this.flashType = ''
@@ -926,9 +556,9 @@ export default {
       }
 
       // Gunakan Vue.set untuk menambahkan properti baru secara reaktif
-      if (this.modalContext === 'gaji_fakultas') {
+      if (this.modalContext === 'komponen_pendapatan') {
         this.$set(
-          this.gaji_fakultas.komponen_baru,
+          this.komponen_pendapatan.komponen_baru,
           this.komponenBaru.nama,
           this.komponenBaru.nilai
         )
@@ -947,9 +577,9 @@ export default {
       this.showModal = false
     },
     hapusKomponen(context, namaKomponen) {
-      if (context === 'gaji_fakultas') {
-        // Hapus komponen dari gaji_fakultas
-        this.$delete(this.gaji_fakultas.komponen_baru, namaKomponen)
+      if (context === 'komponen_pendapatan') {
+        // Hapus komponen dari komponen_pendapatan
+        this.$delete(this.komponen_pendapatan.komponen_baru, namaKomponen)
       } else if (context === 'potongan') {
         // Hapus komponen dari potongan
         this.$delete(this.potongan, namaKomponen)
@@ -1010,7 +640,7 @@ export default {
         .filter(
           (key) =>
             key !== 'id' &&
-            key !== 'dosen_tetap_id' &&
+            key !== 'dosenlb_id' &&
             key !== 'deleted_at' &&
             key !== 'created_at' &&
             key !== 'updated_at' &&
@@ -1038,6 +668,47 @@ export default {
     // },
   },
   computed: {
+    totalKomponenPendapatan() {
+      let total = 0
+      for (const value of Object.values(this.komponen_pendapatan)) {
+        total += Number(value) || 0 // Pastikan ini adalah angka
+      }
+      for (const value of Object.values(
+        this.komponen_pendapatan.komponen_baru
+      )) {
+        total += Number(value) || 0 // Tambahkan ini untuk memperhitungkan komponen_baru
+      }
+      return total
+    },
+
+    totalPotongan() {
+      let total = this.potongan.sp_fh + this.potongan.infaq
+      Object.values(this.potongan.komponen_baru).forEach((val) => {
+        total += parseFloat(val) || 0
+      })
+      return total
+    },
+
+    calculatePph25() {
+      // Pastikan totalKomponenPendapatan adalah angka
+      return this.totalKomponenPendapatan * 0.5 * 0.06
+    },
+
+    calculatePendapatanBersih() {
+      // Penghitungan pendapatan bersih
+      return (
+        this.totalKomponenPendapatan -
+        (this.totalPotongan + this.calculatePph25)
+      )
+    },
+
+    formattedTotalGajiFakultas() {
+      return this.formatRupiah(this.totalKomponenPendapatan)
+    },
+
+    formattedTotalPotongan() {
+      return this.formatRupiah(this.totalPotongan)
+    },
     totalGajiUniversitas() {
       return (
         this.gaji_pokok +
@@ -1061,24 +732,30 @@ export default {
       let total = 0
 
       // Jumlahkan nilai komponen yang sudah diketahui
-      total += this.gaji_fakultas.tunjangan_tambahan
-      total += this.gaji_fakultas.honor_kinerja
-      total += this.gaji_fakultas.honor_kelebihan_mengajar
-      total += this.gaji_fakultas.honor_mengajar_dpk
-      total += this.gaji_fakultas.peny_honor_mengajar
-      total += this.gaji_fakultas.tunjangan_guru_besar
-      total += this.gaji_fakultas.honor
+      total += this.komponen_pendapatan.tunjangan_tambahan
+      total += this.komponen_pendapatan.honor_kinerja
+      total += this.komponen_pendapatan.tunjangan_guru_besar
+      total += this.komponen_pendapatan.honor_mengajar
 
       // Jumlahkan nilai dari komponen baru, jika ada
-      if (this.gaji_fakultas.komponen_baru) {
-        for (let key in this.gaji_fakultas.komponen_baru) {
-          if (this.gaji_fakultas.komponen_baru.hasOwnProperty(key)) {
-            total += parseFloat(this.gaji_fakultas.komponen_baru[key]) || 0
+      if (this.komponen_pendapatan.komponen_baru) {
+        for (let key in this.komponen_pendapatan.komponen_baru) {
+          if (this.komponen_pendapatan.komponen_baru.hasOwnProperty(key)) {
+            total +=
+              parseFloat(this.komponen_pendapatan.komponen_baru[key]) || 0
           }
         }
       }
 
       return total
+    },
+    filteredKomponenPendapatan() {
+      // Copy objek komponen_pendapatan
+      const filtered = { ...this.komponen_pendapatan }
+      // Hapus properti yang tidak diinginkan
+      delete filtered.komponen_baru
+      // Kembalikan objek yang telah difilter
+      return filtered
     },
     formattedTotalGajiFakultas() {
       return this.formatRupiah(this.totalGajiFakultas)

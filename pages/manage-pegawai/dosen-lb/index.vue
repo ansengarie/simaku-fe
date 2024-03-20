@@ -22,6 +22,7 @@
                 type="text"
                 name=""
                 id=""
+                v-model="searchQuery"
                 class="input-field !outline-none !border-none italic form-icon-search ring-indigo-200 focus:ring-2 transition-all duration-300 w-full pr-10"
                 placeholder="Search ..."
               />
@@ -40,7 +41,7 @@
         <div class="mb-[30px]">
           <div class="flex items-center justify-end gap-6">
             <div>
-              <nuxt-link to="dosen-lb/create">
+              <nuxt-link to="dosen-tetap/create">
                 <button
                   class="px-8 py-2 text-lg font-bold text-white rounded-full bg-primary w-190 h-46"
                 >
@@ -97,7 +98,12 @@
           <div>
             <div class="card min-h-[468px] max-w-[1078px]">
               <div class="text-center">
-                <div v-if="dosenTetapData && dosenTetapData.length">
+                <div v-if="filteredData.length === 0" class="my-4 text-center">
+                  <p>
+                    Tidak ada hasil yang ditemukan untuk "{{ searchQuery }}"
+                  </p>
+                </div>
+                <div v-else>
                   <table class="w-full h-full table-auto">
                     <thead>
                       <tr class="border-b">
@@ -152,7 +158,9 @@
                         </th>
                         <th class="px-4 py-2 font-head-tabel">Status</th>
                         <th class="px-4 py-2 font-head-tabel">Jabatan</th>
-                        <th class="px-4 py-2 font-head-tabel">Bank</th>
+                        <th class="px-4 py-2 font-head-tabel">
+                          Nomor Handphone
+                        </th>
                         <th class="px-4 py-2 font-head-tabel">Aksi</th>
                       </tr>
                     </thead>
@@ -184,7 +192,7 @@
                           </p>
                         </td>
                         <td>{{ dosen.jabatan }}</td>
-                        <td>{{ dosen.nama_bank }}</td>
+                        <td>{{ dosen.nomor_hp }}</td>
                         <td>
                           <div class="flex justify-center">
                             <nuxt-link
@@ -197,6 +205,7 @@
                                 src="~/assets/img/ic_edit.png"
                                 alt="Edit Icon"
                                 class="w-[24px] col-span-1"
+                                title="Edit"
                               />
                             </nuxt-link>
                             <!-- <nuxt-link
@@ -211,6 +220,7 @@
                                 src="~/assets/img/ic_delete.png"
                                 alt="Delete"
                                 class="w-[24px] col-span-1"
+                                title="Hapus"
                               />
                             </button>
                             <!-- </nuxt-link> -->
@@ -229,7 +239,7 @@
                   </table>
                 </div>
                 <div v-else class="my-5 text-center">
-                  <p>Tidak ada data dosen luar biasa.</p>
+                  <p>Tidak ada data dosen tetap.</p>
                 </div>
               </div>
               <div class="flex justify-between mt-auto px-[25px] py-[25px]">
@@ -298,7 +308,7 @@ export default {
       totalAktifDosenTetap: 0, // Inisialisasi data sebagai null
       totalDosenTetapAktif: 0, // Inisialisasi data sebagai null
       totalDosenTetapNonAktif: 0, // Inisialisasi data sebagai null
-      dosenTetapData: 0, // Inisialisasi array untuk menyimpan data Dosen Tetap
+      dosenTetapData: [], // Inisialisasi array untuk menyimpan data Dosen Tetap
       isModalOpen: false, // Inisialisasi status modal sebagai false
       currentId: null, // Inisialisasi ID Dosen Tetap yang akan dihapus
       currentName: '', // Inisialisasi nama Dosen Tetap yang akan dihapus
@@ -306,6 +316,7 @@ export default {
       itemsPerPage: 10,
       sortBy: null, // kolom yang akan disort
       sortOrder: 'asc', // 'asc' untuk ascending, 'desc' untuk descending
+      searchQuery: '',
     }
   },
   mounted() {
@@ -409,12 +420,29 @@ export default {
       })
     },
     paginatedData() {
+      console.log('Filtered Data:', JSON.stringify(this.filteredData, null, 2))
       const start = (this.currentPage - 1) * this.itemsPerPage
       const end = start + this.itemsPerPage
-      return this.sortedData.slice(start, end)
+      if (Array.isArray(this.filteredData)) {
+        return this.filteredData.slice(start, end)
+      }
+      return []
     },
     numberOfPages() {
-      return Math.ceil(this.dosenTetapData.length / this.itemsPerPage)
+      return Math.ceil(this.filteredData.length / this.itemsPerPage)
+    },
+    filteredData() {
+      if (!this.searchQuery) {
+        return Array.isArray(this.dosenTetapData) ? this.dosenTetapData : []
+      }
+      const query = this.searchQuery.toLowerCase()
+      const result = this.dosenTetapData.filter(
+        (dosen) =>
+          dosen.nama.toLowerCase().includes(query) ||
+          dosen.no_pegawai.toLowerCase().includes(query) ||
+          dosen.golongan.toLowerCase().includes(query)
+      )
+      return Array.isArray(result) ? result : []
     },
   },
 }

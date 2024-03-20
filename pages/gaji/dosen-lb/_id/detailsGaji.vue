@@ -5,7 +5,7 @@
         <img src="~/assets/img/logo-simaku-index.png" class="mx-[50px]" />
       </div>
       <div class="flex justify-end justify-self-end">
-        <nuxt-link to="/gaji/dosen-tetap">
+        <nuxt-link to="/gaji/dosen-lb">
           <img src="~/assets/img/btn_close.png" class="mx-[50px]" />
         </nuxt-link>
       </div>
@@ -16,7 +16,7 @@
         <div class="w-full space-y-6 md:w-11/12">
           <!-- Judul -->
           <div class="w-full text-2xl font-semibold text-center text-navy text">
-            Transaksi Gaji Dosen Tetap
+            Transaksi Gaji Dosen Luar Biasa
           </div>
 
           <div class="w-full py-6 bg-white shadow-xl rounded-xl">
@@ -67,13 +67,6 @@
                         </td>
                         <td v-else>
                           <p></p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-grey">Status Bank</td>
-                        <td>:</td>
-                        <td class="" v-if="selectedGajiData">
-                          {{ selectedGajiData.status_bank }}
                         </td>
                       </tr>
 
@@ -146,7 +139,7 @@
 
                           <nuxt-link
                             :to="{
-                              name: 'gaji-dosen-tetap-id-editGaji',
+                              name: 'gaji-dosen-lb-id-editGaji',
                               params: { id: selId },
                             }"
                           >
@@ -227,59 +220,11 @@
                 </div>
               </div>
               <div v-if="selectedGajiData" class="space-y-3">
-                <div
-                  class="w-full py-2 text-xl font-semibold text-center text-white bg-navy"
-                >
-                  Gaji Universitas
-                </div>
-
-                <!-- Konten Gaji Pusat -->
-
-                <!-- tampilkan data dari API secara dinamis -->
-                <div
-                  class="grid grid-cols-1 px-6 md:mx-[74px] gap-x-12 gap-y-2 md:grid-cols-2"
-                >
-                  <!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
-                  <div
-                    v-for="(value, key) in selectedGajiData.gaji_universitas[0]"
-                    :key="key"
-                    class="md:w-3/4 form-group"
-                    v-if="
-                      key !== 'id' &&
-                      key !== 'dosen_tetap_id' &&
-                      key !== 'deleted_at' &&
-                      key !== 'created_at' &&
-                      key !== 'updated_at'
-                    "
-                  >
-                    <label :for="key" class="text-navy">{{
-                      formatLabel(key)
-                    }}</label>
-                    <input
-                      type="text"
-                      class="font-medium input-field"
-                      :value="formatRupiah(value)"
-                      disabled
-                    />
-                  </div>
-                  <div class="form-group mb-6 md:w-[36%] md:col-span-2">
-                    <label for="" class="font-bold text-navy"
-                      >Total Gaji Universitas</label
-                    >
-                    <input
-                      type="text"
-                      class="font-medium input-field"
-                      :value="calculateTotalGajiUniversitas()"
-                      disabled
-                    />
-                  </div>
-                </div>
-
                 <!-- Section Gaji Fakultas Hukum-->
                 <div
                   class="w-full py-2 text-xl font-semibold text-center text-white bg-navy"
                 >
-                  Gaji Fakultas Hukum
+                  Komponen Pendapatan
                 </div>
 
                 <!-- Konten Gaji Fakultas Hukum -->
@@ -287,8 +232,8 @@
                   class="grid grid-cols-1 px-6 md:mx-[74px] gap-x-12 gap-y-2 md:grid-cols-2"
                 >
                   <div
-                    v-for="(value, key) in selectedGajiData.gaji_fakultas[0]
-                      .gaji_fakultas"
+                    v-for="(value, key) in selectedGajiData
+                      .komponen_pendapatan[0].komponen_pendapatan"
                     :key="key"
                     class="md:w-3/4 form-group"
                     v-if="
@@ -317,7 +262,7 @@
                     <input
                       type="text"
                       class="font-medium input-field"
-                      :value="calculateTotal('gaji_fakultas')"
+                      :value="calculateTotal('komponen_pendapatan')"
                       disabled
                     />
                   </div>
@@ -524,7 +469,7 @@ export default {
     try {
       const token = localStorage.getItem('token')
       const headers = token ? { Authorization: `Bearer ${token}` } : {}
-      const { data } = await $axios.get(`/dosentetap/gaji/${params.id}`, {
+      const { data } = await $axios.get(`/dosenlb/gaji/${params.id}`, {
         headers,
       })
 
@@ -572,24 +517,7 @@ export default {
       // Log the selectedGajiData for debugging
       console.log('selectedGajiData:', this.selectedGajiData)
     },
-    calculateTotalGajiUniversitas() {
-      const gajiUniv = this.selectedGajiData.gaji_universitas[0]
-      const total = Object.keys(gajiUniv)
-        .filter(
-          (key) =>
-            key !== 'id' &&
-            key !== 'dosen_tetap_id' &&
-            key !== 'deleted_at' &&
-            key !== 'created_at' &&
-            key !== 'updated_at'
-        )
-        .reduce((acc, key) => {
-          const value = parseFloat(gajiUniv[key]) || 0
-          return acc + value
-        }, 0)
 
-      return this.formatRupiah(total.toString())
-    },
     calculateTotal(component) {
       const data = this.selectedGajiData[component][0][component]
 
@@ -597,7 +525,7 @@ export default {
         .filter(
           (key) =>
             key !== 'id' &&
-            key !== 'dosen_tetap_id' &&
+            key !== 'dosen_lb_id' &&
             key !== 'deleted_at' &&
             key !== 'created_at' &&
             key !== 'updated_at' &&
@@ -651,7 +579,7 @@ export default {
     },
     async deleteTransaksiById(id) {
       try {
-        await this.$axios.delete(`/dosentetap/gaji/transaksi/delete/${id}`, {
+        await this.$axios.delete(`/dosenlb/gaji/transaksi/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -669,7 +597,7 @@ export default {
       try {
         const token = localStorage.getItem('token') // ambil token dari penyimpanan lokal
         const response = await this.$axios.get(
-          `/dosentetap/gaji/slip/cetak/${transaksiId}`,
+          `/dosenlb/gaji/slip/cetak/${transaksiId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // sertakan token dalam header
@@ -687,7 +615,7 @@ export default {
       try {
         const token = localStorage.getItem('token')
         await this.$axios.post(
-          `/dosentetap/gaji/slip/kirim/${transaksiId}`,
+          `/dosenlb/gaji/slip/kirim/${transaksiId}`,
           {},
           {
             headers: {

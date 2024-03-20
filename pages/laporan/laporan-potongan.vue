@@ -230,14 +230,16 @@ export default {
       return teks
     },
     tableHeaders() {
-      if (this.filteredLaporanPotongan.length > 0) {
-        const potonganKeys = Object.keys(
-          this.filteredLaporanPotongan[0].potongan
-        )
-        return ['No Pegawai', 'Nama', ...potonganKeys.map(this.formatHeader)]
-      }
-      return []
+      let uniqueKeys = new Set(['No Pegawai', 'Nama']) // Set default keys
+      this.filteredLaporanPotongan.forEach((item) => {
+        Object.keys(item.potongan).forEach((key) => {
+          uniqueKeys.add(key) // Add each key to the Set
+        })
+      })
+
+      return [...uniqueKeys].map(this.formatHeader) // Convert the Set to an Array and map through formatHeader
     },
+
     //nambah
     filteredData() {
       if (!this.searchQuery) {

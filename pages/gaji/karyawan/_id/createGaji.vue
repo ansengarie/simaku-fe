@@ -115,37 +115,9 @@
                       </tr>
 
                       <tr>
-                        <td class="text-grey">Status Bank</td>
-                        <td>:</td>
-                        <td class="">
-                          <select
-                            name="statusBank"
-                            id="statusBank"
-                            class="p-1 border input-field"
-                            v-model="statusBank"
-                          >
-                            <option value="Payroll">Payroll</option>
-                            <option value="Non Payroll">Non Payroll</option>
-                          </select>
-                        </td>
-                      </tr>
-
-                      <tr>
                         <td class="text-grey">Periode</td>
                         <td>:</td>
-                        <td class="">
-                          <date-range-picker
-                            v-model="selectedDateRange"
-                            :disabledDates="disabledDates"
-                            class="mt-2 border border-navy"
-                          />
-                          <div v-if="responseData">
-                            <p>
-                              Start Date: {{ responseData.gaji_date_start }}
-                            </p>
-                            <p>End Date: {{ responseData.gaji_date_end }}</p>
-                          </div>
-                        </td>
+                        <td class="">{{ getCurrentMonthYear() }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -329,48 +301,7 @@
                         required
                       />
                     </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Honor Kelebihan Mengajar</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.honor_kelebihan_mengajar"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy">Honor Mengajar DPK</label>
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.honor_mengajar_dpk"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Penyesuaian Honor Mengajar</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.peny_honor_mengajar"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="" class="text-navy"
-                        >Tunjangan Guru Besar</label
-                      >
-                      <input
-                        type="text"
-                        class="input-field"
-                        v-model.number="gaji_fakultas.tunjangan_guru_besar"
-                        required
-                      />
-                    </div>
+
                     <div class="form-group">
                       <label for="" class="text-navy">Honor</label>
                       <input
@@ -703,12 +634,9 @@
 </template>
 
 <script>
-import DateRangePicker from 'vue2-daterange-picker'
-import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 export default {
   components: {
     flashMessage: () => import('~/components/FlashMessage.vue'),
-    DateRangePicker,
   },
   data() {
     return {
@@ -761,35 +689,25 @@ export default {
       jumlah_set_pajak: 0,
       potongan_tak_kena_pajak: 0,
       pendapatan_bersih: 0,
-      dosen_tetap_id: '',
-      dostap_bank_id: '',
+      karyawan_id: '',
+      karyawan_bank_id: '',
+      karyawan_tetap_id: '',
+      karyawan_bank_id: '',
       showModal: false,
       komponenBaru: {
         nama: '',
         nilai: 0,
         modalContext: '',
       },
-      statusBank: '',
-      gaji_date_start: '',
-      gaji_date_end: '',
-      selectedDateRange: {
-        startDate: null,
-        endDate: null,
-      },
-      disabledDates: {
-        to: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
-      },
-      responseData: null,
     }
   },
-
   async asyncData({ params, $axios }) {
     try {
       const token = localStorage.getItem('token')
       const headers = token ? { Authorization: `Bearer ${token}` } : {}
 
       // Fetch the data for the specific ID
-      const response = await $axios.get(`/dosentetap/${params.id}`, { headers })
+      const response = await $axios.get(`/karyawan/${params.id}`, { headers })
 
       // Find the specific dosen data from the array
       const dosenDataArray = response.data.data.data
@@ -810,13 +728,6 @@ export default {
   methods: {
     async tambahTransaksiGaji() {
       try {
-        const startDate = this.selectedDateRange.startDate
-          ? this.selectedDateRange.startDate.toISOString().slice(0, 10)
-          : null
-        const endDate = this.selectedDateRange.endDate
-          ? this.selectedDateRange.endDate.toISOString().slice(0, 10)
-          : null
-
         const dataToPost = {
           gaji_pokok: this.gaji_pokok,
           tunjangan_fungsional: this.tunjangan_fungsional,
@@ -834,11 +745,6 @@ export default {
           gaji_fakultas: {
             tunjangan_tambahan: this.gaji_fakultas.tunjangan_tambahan,
             honor_kinerja: this.gaji_fakultas.honor_kinerja,
-            honor_kelebihan_mengajar:
-              this.gaji_fakultas.honor_kelebihan_mengajar,
-            honor_mengajar_dpk: this.gaji_fakultas.honor_mengajar_dpk,
-            peny_honor_mengajar: this.gaji_fakultas.peny_honor_mengajar,
-            tunjangan_guru_besar: this.gaji_fakultas.tunjangan_guru_besar,
             honor: this.gaji_fakultas.honor,
             // Array untuk menyimpan komponen baru
             ...this.gaji_fakultas.komponen_baru,
@@ -862,11 +768,8 @@ export default {
           jumlah_set_pajak: this.jumlahSetoranPajak,
           potongan_tak_kena_pajak: this.potonganTakKenaPajak,
           pendapatan_bersih: this.pendapatanBersih,
-          dosen_tetap_id: this.dosenData.id,
-          dostap_bank_id: this.selectedBank,
-          status_bank: this.statusBank,
-          gaji_date_start: startDate,
-          gaji_date_end: endDate,
+          karyawan_id: this.dosenData.id,
+          karyawan_bank_id: this.selectedBank,
         }
 
         // Menampilkan data yang akan dikirim ke API di console log
@@ -874,7 +777,7 @@ export default {
 
         // console.log(this.hasil)
         const response = await this.$axios.post(
-          'dosentetap/gaji/transaksi/create',
+          'karyawan/gaji/transaksi/create',
           dataToPost,
           {
             headers: {
@@ -884,7 +787,7 @@ export default {
           }
         )
         this.flashType = 'success'
-        this.flashMsg = 'Data transaksi gaji dosen berhasil ditambahkan!'
+        this.flashMsg = 'Data transaksi gaji karyawan berhasil ditambahkan!'
         // Menampilkan indikator loading
         this.isLoading = true
 
@@ -894,7 +797,7 @@ export default {
           this.isLoading = false
 
           // Mengalihkan ke halaman yang diinginkan
-          this.$router.push('/gaji/dosen-tetap')
+          this.$router.push('/gaji/karyawan')
         }, 2000)
       } catch (error) {
         console.error('Error tambah Dosen Tetap:', error)
@@ -911,7 +814,7 @@ export default {
           console.error('Error:', error.message)
           this.flashType = 'error'
           this.flashMsg =
-            'Terjadi kesalahan saat menambahkan data transaksi gaji dosen.'
+            'Terjadi kesalahan saat menambahkan data transaksi karyawan dosen.'
         }
       }
     },
@@ -1010,7 +913,7 @@ export default {
         .filter(
           (key) =>
             key !== 'id' &&
-            key !== 'dosen_tetap_id' &&
+            key !== 'karyawan_id' &&
             key !== 'deleted_at' &&
             key !== 'created_at' &&
             key !== 'updated_at' &&
@@ -1063,10 +966,6 @@ export default {
       // Jumlahkan nilai komponen yang sudah diketahui
       total += this.gaji_fakultas.tunjangan_tambahan
       total += this.gaji_fakultas.honor_kinerja
-      total += this.gaji_fakultas.honor_kelebihan_mengajar
-      total += this.gaji_fakultas.honor_mengajar_dpk
-      total += this.gaji_fakultas.peny_honor_mengajar
-      total += this.gaji_fakultas.tunjangan_guru_besar
       total += this.gaji_fakultas.honor
 
       // Jumlahkan nilai dari komponen baru, jika ada

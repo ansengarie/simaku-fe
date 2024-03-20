@@ -5,7 +5,7 @@
         <img src="~/assets/img/logo-simaku-index.png" class="mx-[50px]" />
       </div>
       <div class="flex justify-end justify-self-end">
-        <nuxt-link to="/gaji/dosen-tetap">
+        <nuxt-link to="/gaji/karyawan">
           <img src="~/assets/img/btn_close.png" class="mx-[50px]" />
         </nuxt-link>
       </div>
@@ -67,13 +67,6 @@
                         </td>
                         <td v-else>
                           <p></p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-grey">Status Bank</td>
-                        <td>:</td>
-                        <td class="" v-if="selectedGajiData">
-                          {{ selectedGajiData.status_bank }}
                         </td>
                       </tr>
 
@@ -146,7 +139,7 @@
 
                           <nuxt-link
                             :to="{
-                              name: 'gaji-dosen-tetap-id-editGaji',
+                              name: 'gaji-karyawan-id-editGaji',
                               params: { id: selId },
                             }"
                           >
@@ -297,7 +290,11 @@
                       key !== 'deleted_at' &&
                       key !== 'created_at' &&
                       key !== 'total_gaji_fakultas' &&
-                      key !== 'updated_at'
+                      key !== 'updated_at' &&
+                      key !== 'honor_kelebihan_mengajar' &&
+                      key !== 'honor_mengajar_dpk' &&
+                      key !== 'peny_honor_mengajar' &&
+                      key !== 'tunjangan_guru_besar'
                     "
                   >
                     <label :for="key" class="text-navy">{{
@@ -524,7 +521,7 @@ export default {
     try {
       const token = localStorage.getItem('token')
       const headers = token ? { Authorization: `Bearer ${token}` } : {}
-      const { data } = await $axios.get(`/dosentetap/gaji/${params.id}`, {
+      const { data } = await $axios.get(`/karyawan/gaji/${params.id}`, {
         headers,
       })
 
@@ -651,7 +648,7 @@ export default {
     },
     async deleteTransaksiById(id) {
       try {
-        await this.$axios.delete(`/dosentetap/gaji/transaksi/delete/${id}`, {
+        await this.$axios.delete(`/karyawan/gaji/transaksi/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -669,7 +666,7 @@ export default {
       try {
         const token = localStorage.getItem('token') // ambil token dari penyimpanan lokal
         const response = await this.$axios.get(
-          `/dosentetap/gaji/slip/cetak/${transaksiId}`,
+          `/karyawan/gaji/slip/cetak/${transaksiId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // sertakan token dalam header
@@ -687,7 +684,7 @@ export default {
       try {
         const token = localStorage.getItem('token')
         await this.$axios.post(
-          `/dosentetap/gaji/slip/kirim/${transaksiId}`,
+          `/karyawan/gaji/slip/kirim/${transaksiId}`,
           {},
           {
             headers: {

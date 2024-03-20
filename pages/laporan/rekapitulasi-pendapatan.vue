@@ -92,8 +92,14 @@
               v-html="teksRekapitulasi"
             ></p>
           </div>
+          <div v-if="searchFilteredData.length === 0" class="py-4 text-center">
+            <p>
+              Tidak ada data yang ditemukan untuk pencarian: "{{ searchQuery }}"
+            </p>
+          </div>
           <div class="overflow-x-auto">
             <table
+              v-if="searchFilteredData.length > 0"
               class="min-w-full text-sm text-left text-gray-500 dark:text-gray-400"
             >
               <thead
@@ -112,7 +118,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(item, index) in filteredRekapitulasiPendapatan"
+                  v-for="(item, index) in searchFilteredData"
                   :key="`row-${index}`"
                   class="border-b"
                 >
@@ -236,6 +242,20 @@ export default {
       let end = start + this.itemsPerPage
       return this.filteredRekapitulasiPendapatan.slice(start, end)
     },
+    searchFilteredData() {
+      if (!this.searchQuery) {
+        return this.paginatedData // return semua data jika tidak ada query pencarian
+      }
+      const query = this.searchQuery.toLowerCase()
+      return this.paginatedData.filter((item) => {
+        return (
+          item.no_pegawai.toLowerCase().includes(query) ||
+          item.nama.toLowerCase().includes(query) ||
+          item.golongan.toLowerCase().includes(query)
+        )
+        // Tambahkan kondisi lainnya jika diperlukan
+      })
+    },
 
     teksRekapitulasi() {
       let teks = 'Rekapitulasi Pendapatan '
@@ -253,27 +273,43 @@ export default {
       return teks
     },
     tableHeaders() {
-      if (this.filteredRekapitulasiPendapatan.length > 0) {
-        let headers = ['No Pegawai', 'Nama', 'Golongan']
+      let headers = ['No Pegawai', 'Nama', 'Golongan']
 
-        // Menambahkan header dinamis berdasarkan jenis pegawai
-        const firstEntry = this.filteredRekapitulasiPendapatan[0]
-        if (firstEntry.gaji_fakultas) {
-          headers = headers.concat(Object.keys(firstEntry.gaji_fakultas))
-        } else if (firstEntry.komponen_pendapatan) {
-          headers = headers.concat(Object.keys(firstEntry.komponen_pendapatan))
+      if (this.pegawaiTerpilih === 'Dosen Luar Biasa') {
+        // Untuk Dosen Luar Biasa, ambil header dari `komponen_pendapatan`
+        if (
+          this.filteredRekapitulasiPendapatan.length > 0 &&
+          this.filteredRekapitulasiPendapatan[0].komponen_pendapatan
+        ) {
+          headers = headers.concat(
+            Object.keys(
+              this.filteredRekapitulasiPendapatan[0].komponen_pendapatan
+            )
+          )
         }
+      } else {
+        // Untuk Dosen Tetap atau Karyawan, ambil header dari `gaji_fakultas` dan tambahkan header tambahan
+        this.filteredRekapitulasiPendapatan.forEach((item) => {
+          if (item.gaji_fakultas) {
+            Object.keys(item.gaji_fakultas).forEach((key) => {
+              if (!headers.includes(key)) {
+                headers.push(key)
+              }
+            })
+          }
+        })
 
-        // Menambahkan header untuk jumlah gaji FH dan pusat jika ada
-        if (firstEntry.jumlah_gaji_fh) headers.push('Jumlah Gaji FH')
-        if (firstEntry.jumlah_gaji_pusat) headers.push('Jumlah Gaji Pusat')
-
-        // Selalu menambahkan header untuk total
-        headers.push('Total')
-
-        return headers.map(this.formatHeader)
+        if (['Dosen Tetap', 'Karyawan'].includes(this.pegawaiTerpilih)) {
+          headers.push('Jumlah Gaji FH')
+          headers.push('Jumlah Gaji Pusat')
+        }
       }
-      return []
+
+      // Header "Total" selalu ditambahkan
+      headers.push('Total')
+
+      // Memformat header
+      return headers.map(this.formatHeader)
     },
 
     getValueFromNestedObject(item, path) {
@@ -283,19 +319,6 @@ export default {
       return properties.reduce((prev, curr) => prev && prev[curr], item)
     },
     //nambah
-    filteredData() {
-      if (!this.searchQuery) {
-        return this.laporanPajak // Kembali ke data asli jika tidak ada query pencarian
-      }
-      return this.laporanPajak.filter((item) => {
-        // Menggabungkan pencarian nama dan nomor pegawai
-        return (
-          item?.pajak?.biaya_jabatan !== undefined &&
-          (item.nama.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            item.no_pegawai.includes(this.searchQuery))
-        )
-      })
-    },
   },
   methods: {
     async fetchRekapitulasiPendapatan() {
@@ -453,11 +476,10 @@ export default {
     },
 
     generateExcel() {
-      const wb = XLSX.utils.book_new()
-      const wsData = []
+      const wb = XLSX.utils.book_new() // Membuat workbook baru
+      let headers = [] // Inisialisasi array untuk header
 
-      // Menentukan header berdasarkan jenis pegawai
-      let headers = []
+      // Menentukan header berdasarkan jenis pegawai terpilih
       if (this.pegawaiTerpilih === 'Dosen Tetap') {
         headers = [
           'No Pegawai',
@@ -498,61 +520,48 @@ export default {
           'Total',
         ]
       }
-      wsData.push(headers)
 
-      // Menentukan dan menambahkan data untuk setiap jenis pegawai
+      // Menyiapkan array untuk data worksheet, dimulai dengan header
+      const wsData = [headers]
+
+      // Menambahkan data ke worksheet
       this.filteredRekapitulasiPendapatan.forEach((item) => {
-        let rowData = []
-        switch (this.pegawaiTerpilih) {
-          case 'Dosen Tetap':
-            rowData = [
-              item.no_pegawai,
-              item.nama,
-              item.golongan,
-              ...Object.values(item.gaji_fakultas),
-              item.jumlah_gaji_fh,
-              item.jumlah_gaji_pusat,
-              item.total,
-            ]
-            break
-          case 'Dosen Luar Biasa':
-            rowData = [
-              item.no_pegawai,
-              item.nama,
-              item.golongan,
-              ...Object.values(item.komponen_pendapatan),
-              item.total,
-            ]
-            break
-          case 'Karyawan':
-            rowData = [
-              item.no_pegawai,
-              item.nama,
-              item.golongan,
-              ...Object.values(item.gaji_fakultas),
-              item.jumlah_gaji_fh,
-              item.jumlah_gaji_pusat,
-              item.total,
-            ]
-            break
-          default:
-            // Handle other cases or provide a default
-            rowData = []
-        }
+        // Mengambil nilai dari nested object 'gaji_fakultas' jika ada
+        const gajiFakultas = item.gaji_fakultas || {}
+        const rowData = [
+          item.no_pegawai,
+          item.nama,
+          item.golongan,
+          gajiFakultas.tunjangan_tambahan || '',
+          gajiFakultas.honor_kinerja || '',
+          gajiFakultas.honor_kelebihan_mengajar || '',
+          gajiFakultas.honor_mengajar_dpk || '',
+          gajiFakultas.peny_honor_mengajar || '',
+          gajiFakultas.tunjangan_guru_besar || '',
+          gajiFakultas.honor || '',
+          item.jumlah_gaji_fh || '',
+          item.jumlah_gaji_pusat || '',
+          item.total || '',
+        ]
         wsData.push(rowData)
       })
 
+      // Membuat worksheet dari data yang disiapkan
       const ws = XLSX.utils.aoa_to_sheet(wsData)
+
+      // Menambahkan worksheet ke workbook
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
 
-      // Tentukan nama file
+      // Menentukan nama file berdasarkan jenis pegawai dan periode
       const jenisPegawai = this.pegawaiTerpilih
         .toLowerCase()
         .replace(/\s+/g, '-')
       const [bulan, tahun] = this.periodeTerpilih.split(' ')
       const fileName = `rekapitulasi-pendapatan_${jenisPegawai}_${bulan.toLowerCase()}_${tahun}.xlsx`
-    },
 
+      // Menyimpan workbook ke file (mengunduh file)
+      XLSX.writeFile(wb, fileName)
+    },
     getFilteredDataForExcel() {
       // Pastikan untuk menyesuaikan dengan struktur data yang Anda miliki
       return this.filteredRekapitulasiPendapatan.map((item) => {

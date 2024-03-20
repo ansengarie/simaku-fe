@@ -20,6 +20,7 @@
                 type="text"
                 name=""
                 id=""
+                v-model="searchQuery"
                 class="input-field !outline-none !border-none italic form-icon-search ring-indigo-200 focus:ring-2 transition-all duration-300 w-full pr-10"
                 placeholder="Search ..."
               />
@@ -95,7 +96,12 @@
           <div>
             <div class="card min-h-[468px] max-w-[1078px]">
               <div class="text-center">
-                <div v-if="dosenTetapData && dosenTetapData.length">
+                <div v-if="filteredData.length === 0" class="my-4 text-center">
+                  <p>
+                    Tidak ada hasil yang ditemukan untuk "{{ searchQuery }}"
+                  </p>
+                </div>
+                <div v-else>
                   <table class="w-full h-full table-auto">
                     <thead>
                       <tr class="border-b">
@@ -308,6 +314,7 @@ export default {
       itemsPerPage: 10,
       sortBy: null, // kolom yang akan disort
       sortOrder: 'asc', // 'asc' untuk ascending, 'desc' untuk descending
+      searchQuery: '',
     }
   },
   mounted() {
@@ -411,12 +418,29 @@ export default {
       })
     },
     paginatedData() {
+      console.log('Filtered Data:', JSON.stringify(this.filteredData, null, 2))
       const start = (this.currentPage - 1) * this.itemsPerPage
       const end = start + this.itemsPerPage
-      return this.sortedData.slice(start, end)
+      if (Array.isArray(this.filteredData)) {
+        return this.filteredData.slice(start, end)
+      }
+      return []
     },
     numberOfPages() {
-      return Math.ceil(this.dosenTetapData.length / this.itemsPerPage)
+      return Math.ceil(this.filteredData.length / this.itemsPerPage)
+    },
+    filteredData() {
+      if (!this.searchQuery) {
+        return Array.isArray(this.dosenTetapData) ? this.dosenTetapData : []
+      }
+      const query = this.searchQuery.toLowerCase()
+      const result = this.dosenTetapData.filter(
+        (dosen) =>
+          dosen.nama.toLowerCase().includes(query) ||
+          dosen.no_pegawai.toLowerCase().includes(query) ||
+          dosen.golongan.toLowerCase().includes(query)
+      )
+      return Array.isArray(result) ? result : []
     },
   },
 }
