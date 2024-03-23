@@ -39,7 +39,24 @@
       <section class="mt-20">
         <!-- Dropdown untuk memilih periode -->
         <div class="flex justify-between mb-3">
-          <div>
+          <div class="w-[60%] space-y-2">
+            <select
+              v-model="selectedBank"
+              class="px-[8px] py-2 input-field text-sm"
+            >
+              <option disabled value="" selected class="text-sm">
+                Pilih Nama Bank
+              </option>
+              <option v-for="bank in uniqueBanks" :value="bank" :key="bank">
+                {{ bank }}
+              </option>
+            </select>
+            <button
+              @click="confirmBankChange"
+              class="px-3 py-2 text-sm text-white rounded-full btn bg-primary"
+            >
+              Pilih Nama Bank
+            </button>
             <select
               v-model="jenisPayrollTerpilih"
               class="px-[8px] py-2 text-sm input-field"
@@ -51,7 +68,7 @@
               @click="confirmPayrollChange"
               class="px-3 py-2 text-sm text-white rounded-full btn bg-primary"
             >
-              Konfirmasi
+              Pilih Jenis Bank
             </button>
 
             <select
@@ -116,7 +133,9 @@
             <table
               class="min-w-full text-sm text-left text-gray-500 dark:text-gray-400"
             >
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead
+                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              >
                 <tr>
                   <th scope="col" class="px-6 py-3">No Pegawai</th>
                   <th scope="col" class="px-6 py-3">Nama Lengkap</th>
@@ -215,6 +234,7 @@ import * as XLSX from 'xlsx'
 export default {
   data() {
     return {
+      banks: Array,
       searchQuery: '',
       laporanPajak: [],
       periodePajak: [],
@@ -223,6 +243,7 @@ export default {
       periodeTerpilih: '',
       jenisPayrollTerpilih: 'payroll', // nilai default
       filteredLaporanPajak: [],
+      selectedBank: '',
       tempPegawaiTerpilih: 'Dosen Tetap',
       tempPeriodeTerpilih: '',
       currentPage: 1,
@@ -293,6 +314,19 @@ export default {
             item.no_pegawai.includes(this.searchQuery))
         )
       })
+    },
+    uniqueBanks() {
+      const allBanks = []
+      this.rekapitulasiBank.forEach((entry) => {
+        entry.payroll.forEach((payrollItem) => {
+          allBanks.push(payrollItem.nama_bank)
+        })
+        entry.non_payroll.forEach((nonPayrollItem) => {
+          allBanks.push(nonPayrollItem.nama_bank)
+        })
+      })
+      // Menghapus duplikat dan mengurutkan nama bank
+      return Array.from(new Set(allBanks)).sort()
     },
   },
   methods: {
@@ -384,6 +418,38 @@ export default {
           this.jenisPayrollTerpilih === 'payroll'
             ? filteredPeriodData.payroll
             : filteredPeriodData.non_payroll
+      }
+
+      // Reset halaman saat ini ke halaman pertama setelah penyaringan
+      this.currentPage = 1
+    },
+
+    confirmBankChange() {
+      // Filter data berdasarkan periode yang dipilih
+      const [selectedMonth, selectedYear] = this.periodeTerpilih.split(' ')
+      const filteredPeriodData = this.rekapitulasiBank.find(
+        (period) =>
+          period.periode.month === selectedMonth &&
+          period.periode.year === selectedYear
+      )
+
+      // Jika tidak ada data untuk periode tersebut, set array kosong
+      if (!filteredPeriodData) {
+        this.filteredRekapitulasiBank = []
+      } else {
+        // Filter data berdasarkan nama bank yang dipilih
+        const selectedBankData = []
+        filteredPeriodData.payroll.forEach((payrollItem) => {
+          if (payrollItem.nama_bank === this.selectedBank) {
+            selectedBankData.push(payrollItem)
+          }
+        })
+        filteredPeriodData.non_payroll.forEach((nonPayrollItem) => {
+          if (nonPayrollItem.nama_bank === this.selectedBank) {
+            selectedBankData.push(nonPayrollItem)
+          }
+        })
+        this.filteredRekapitulasiBank = selectedBankData
       }
 
       // Reset halaman saat ini ke halaman pertama setelah penyaringan

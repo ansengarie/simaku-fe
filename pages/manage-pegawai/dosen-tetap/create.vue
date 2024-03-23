@@ -113,15 +113,6 @@
             required
           />
         </div>
-        <!-- <div class="form-group">
-          <label for="" class="text-grey">Nama Bank</label>
-          <select class="input-field" v-model="nama_bank">
-            <option value="BNI">BNI</option>
-            <option value="BCA">BCA</option>
-            <option value="BRI">BRI</option>
-            <option value="Mandiri">Mandiri</option>
-          </select>
-        </div> -->
         <div v-if="banks && banks.length">
           <div class="form-group">
             <bank-dropdown
@@ -176,16 +167,6 @@
           <label for="" class="text-grey">Nomor Handphone</label>
           <input type="text" class="input-field" v-model="nomor_hp" required />
         </div>
-
-        <!-- <div class="form-group" v-for="(schema, index) in schemas" :key="index">
-          <label for="" class="text-grey">{{ schema.label }}</label>
-          <input type="text" class="input-field" v-model="schema.value" />
-        </div>
-
-        <div class="form-group">
-          <label for="" class="text-grey">Hasil</label>
-          <input type="text" class="input-field" :value="hasil" readonly />
-        </div> -->
 
         <div class="flex justify-between mt-[43px] mb-[40px] w-[570]">
           <nuxt-link
