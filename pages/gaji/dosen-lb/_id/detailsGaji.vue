@@ -69,7 +69,13 @@
                           <p></p>
                         </td>
                       </tr>
-
+                      <tr>
+                        <td class="text-grey">Status Bank</td>
+                        <td>:</td>
+                        <td class="" v-if="selectedGajiData">
+                          {{ selectedGajiData.status_bank }}
+                        </td>
+                      </tr>
                       <tr>
                         <td class="text-grey">Nomor Rekening</td>
                         <td>:</td>
