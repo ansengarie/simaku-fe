@@ -1029,13 +1029,6 @@ export default {
         currency: 'IDR',
       }).format(nominal)
     },
-    // tambahKomponenGajiFakultas() {
-    //   // Tambahkan logika untuk menambahkan komponen ke state lokal
-    //   // Contoh:
-    //   this.gaji_fakultas[this.komponenBaru.nama] = this.komponenBaru.nilai
-    //   this.showModal = false
-    //   this.komponenBaru = { nama: '', nilai: 0 }
-    // },
   },
   computed: {
     totalGajiUniversitas() {

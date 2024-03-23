@@ -115,9 +115,37 @@
                       </tr>
 
                       <tr>
+                        <td class="text-grey">Status Bank</td>
+                        <td>:</td>
+                        <td class="">
+                          <select
+                            name="statusBank"
+                            id="statusBank"
+                            class="p-1 border input-field"
+                            v-model="statusBank"
+                          >
+                            <option value="Payroll">Payroll</option>
+                            <option value="Non Payroll">Non Payroll</option>
+                          </select>
+                        </td>
+                      </tr>
+
+                      <tr>
                         <td class="text-grey">Periode</td>
                         <td>:</td>
-                        <td class="">{{ getCurrentMonthYear() }}</td>
+                        <td class="">
+                          <date-range-picker
+                            v-model="selectedDateRange"
+                            :disabledDates="disabledDates"
+                            class="mt-2 border border-navy"
+                          />
+                          <div v-if="responseData">
+                            <p>
+                              Start Date: {{ responseData.gaji_date_start }}
+                            </p>
+                            <p>End Date: {{ responseData.gaji_date_end }}</p>
+                          </div>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -634,9 +662,12 @@
 </template>
 
 <script>
+import DateRangePicker from 'vue2-daterange-picker'
+import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 export default {
   components: {
     flashMessage: () => import('~/components/FlashMessage.vue'),
+    DateRangePicker,
   },
   data() {
     return {
@@ -699,6 +730,17 @@ export default {
         nilai: 0,
         modalContext: '',
       },
+      statusBank: '',
+      gaji_date_start: '',
+      gaji_date_end: '',
+      selectedDateRange: {
+        startDate: null,
+        endDate: null,
+      },
+      disabledDates: {
+        to: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+      },
+      responseData: null,
     }
   },
   async asyncData({ params, $axios }) {
@@ -728,6 +770,13 @@ export default {
   methods: {
     async tambahTransaksiGaji() {
       try {
+        const startDate = this.selectedDateRange.startDate
+          ? this.selectedDateRange.startDate.toISOString().slice(0, 10)
+          : null
+        const endDate = this.selectedDateRange.endDate
+          ? this.selectedDateRange.endDate.toISOString().slice(0, 10)
+          : null
+
         const dataToPost = {
           gaji_pokok: this.gaji_pokok,
           tunjangan_fungsional: this.tunjangan_fungsional,
@@ -770,6 +819,9 @@ export default {
           pendapatan_bersih: this.pendapatanBersih,
           karyawan_id: this.dosenData.id,
           karyawan_bank_id: this.selectedBank,
+          status_bank: this.statusBank,
+          gaji_date_start: startDate,
+          gaji_date_end: endDate,
         }
 
         // Menampilkan data yang akan dikirim ke API di console log
