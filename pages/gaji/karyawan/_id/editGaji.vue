@@ -122,7 +122,7 @@
                       <tr>
                         <td class="text-grey">Periode</td>
                         <td>:</td>
-                        <td class="">{{ getCurrentMonthYear() }}</td>
+                        <td class="">{{ endDateMonthAndYear }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -1158,6 +1158,20 @@ export default {
     },
   },
   computed: {
+    endDateMonthAndYear() {
+      if (this.transaksiData) {
+        // Ambil tanggal dari respons
+        const endDate = new Date(this.transaksiData.gaji_date_end)
+
+        // Dapatkan bulan dan tahun dari tanggal
+        const month = endDate.toLocaleString('default', { month: 'long' })
+        const year = endDate.getFullYear()
+
+        // Kembalikan string bulan dan tahun
+        return `${month} ${year}`
+      }
+      return ''
+    },
     totalGajiUniversitas() {
       return (
         Number(this.gaji_pokok) +

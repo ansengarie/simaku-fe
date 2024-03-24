@@ -122,7 +122,9 @@
                       <tr>
                         <td class="text-grey">Periode</td>
                         <td>:</td>
-                        <td class="">{{ getCurrentMonthYear() }}</td>
+                        <td>
+                          {{ endDateMonthAndYear }}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -750,6 +752,7 @@ export default {
       )
 
       console.log(response.data.data)
+      console.log('periods', response.data.data.transaksi)
       // Perbarui state lokal dengan data terbaru dari server
 
       // Destructure the data you need from the response
@@ -764,7 +767,7 @@ export default {
         transaksi,
       } = response.data.data
       const transaksiData = transaksi[0] // asumsikan hanya ada satu transaksi dalam array
-      console.log(transaksiData)
+      console.log('tes', transaksiData)
       return {
         dosen_tetap_id,
         no_pegawai,
@@ -906,24 +909,6 @@ export default {
           uang_lembur_hl: this.uang_lembur_hl,
           transport_kehadiran: this.transport_kehadiran,
           honor_universitas: this.honor_universitas,
-          // gaji_fakultas: this.gaji_fakultas,
-          // gaji_fakultas: {
-          //   tunjangan_tambahan: this.gaji_fakultas.tunjangan_tambahan,
-          //   honor_kinerja: this.gaji_fakultas.honor_kinerja,
-          //   honor_kelebihan_mengajar:
-          //     this.gaji_fakultas.honor_kelebihan_mengajar,
-          //   honor_mengajar_dpk: this.gaji_fakultas.honor_mengajar_dpk,
-          //   peny_honor_mengajar: this.gaji_fakultas.peny_honor_mengajar,
-          //   tunjangan_guru_besar: this.gaji_fakultas.tunjangan_guru_besar,
-          //   honor: this.gaji_fakultas.honor,
-          //   // Array untuk menyimpan komponen baru
-          //   ...this.gaji_fakultas.komponen_baru,
-          // },
-          // potongan: {
-          //   sp_fh: this.potongan.sp_fh,
-          //   infaq: this.potongan.infaq,
-          //   ...this.potongan.komponen_baru,
-          // },
           gaji_fakultas: gajiFakultasWithIntegers,
           potongan: potonganWithIntegers,
           // ... data lainnya
@@ -1161,6 +1146,20 @@ export default {
     },
   },
   computed: {
+    endDateMonthAndYear() {
+      if (this.transaksiData) {
+        // Ambil tanggal dari respons
+        const endDate = new Date(this.transaksiData.gaji_date_end)
+
+        // Dapatkan bulan dan tahun dari tanggal
+        const month = endDate.toLocaleString('default', { month: 'long' })
+        const year = endDate.getFullYear()
+
+        // Kembalikan string bulan dan tahun
+        return `${month} ${year}`
+      }
+      return ''
+    },
     totalGajiUniversitas() {
       return (
         Number(this.gaji_pokok) +
